@@ -76,13 +76,6 @@ export type WorkflowDiagramNode = {
   operations?: string[]
 }
 
-export type WorkflowDiagramEdge = {
-  id: string
-  source: string
-  target: string
-  kind: 'primary' | 'support'
-}
-
 export const workflowDiagramNodes = [
   {
     id: 'domain-input',
@@ -172,17 +165,6 @@ export const workflowDiagramNodes = [
     operations: ['GitHub Actions', 'Cloudflare Pages', 'Worker deploy', 'D1 / KV migrations'],
   },
 ] satisfies WorkflowDiagramNode[]
-
-export const workflowDiagramEdges = [
-  { id: 'input-to-api', source: 'domain-input', target: 'scan-api', kind: 'primary' },
-  { id: 'api-to-engine', source: 'scan-api', target: 'probe-engine', kind: 'primary' },
-  { id: 'engine-to-store', source: 'probe-engine', target: 'evidence-store', kind: 'primary' },
-  { id: 'store-to-ai', source: 'evidence-store', target: 'ai-report', kind: 'primary' },
-  { id: 'ai-to-review', source: 'ai-report', target: 'review-artifact', kind: 'primary' },
-  { id: 'ops-to-api', source: 'operations-plane', target: 'scan-api', kind: 'support' },
-  { id: 'ops-to-engine', source: 'operations-plane', target: 'probe-engine', kind: 'support' },
-  { id: 'ops-to-review', source: 'operations-plane', target: 'review-artifact', kind: 'support' },
-] satisfies WorkflowDiagramEdge[]
 
 export const systemDomains = [
   {
