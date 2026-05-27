@@ -1,0 +1,21 @@
+# Site 10-Layer Check Pages Frontend
+
+Standalone Vue 3 frontend for Cloudflare Pages.
+
+Backend Worker repository:
+
+- `../03-web-app-shell`
+
+Primary UI contract:
+
+- `../docs/plans/ui-language/`
+- `../docs/plans/ui-language/references/stitch_stitch_home_page_checklist/`
+
+## Commands
+
+- `npm run dev` starts Vite locally.
+- `npm run typecheck` runs Vue and TypeScript checks.
+- `npm run lint` runs ESLint.
+- `npm run test:stories` builds Histoire stories.
+- `npm run build` creates the Pages artifact in `dist/`.
+- `npm run deploy:pages` deploys `dist/` to Cloudflare Pages.
