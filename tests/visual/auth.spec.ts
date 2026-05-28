@@ -67,6 +67,35 @@ for (const authRoute of authRoutes) {
   })
 }
 
+test('public header width remains stable when navigating from long public page to login', async ({
+  page,
+}) => {
+  test.skip((page.viewportSize()?.width ?? 0) < 1024, 'desktop scrollbar-gutter check')
+
+  const readHeaderMetrics = () =>
+    page.evaluate(() => {
+      const header = document.querySelector('.site-header__inner')?.getBoundingClientRect()
+
+      return {
+        headerLeft: Math.round(header?.left ?? -1),
+        headerWidth: Math.round(header?.width ?? -1),
+        hasVerticalScrollbar:
+          document.documentElement.scrollHeight > document.documentElement.clientHeight,
+      }
+    })
+
+  await page.goto('/tech')
+  const techMetrics = await readHeaderMetrics()
+
+  await page.goto('/login')
+  const loginMetrics = await readHeaderMetrics()
+
+  expect(techMetrics.hasVerticalScrollbar).toBe(true)
+  expect(loginMetrics.hasVerticalScrollbar).toBe(false)
+  expect(loginMetrics.headerLeft).toBe(techMetrics.headerLeft)
+  expect(loginMetrics.headerWidth).toBe(techMetrics.headerWidth)
+})
+
 test('auth form exposes validation feedback without layout overflow', async ({ page }) => {
   await page.goto('/register')
 

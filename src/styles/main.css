@@ -9,6 +9,7 @@ html {
   background: var(--canvas);
   font-family: var(--font-sans);
   color: var(--ink);
+  scrollbar-gutter: stable;
   text-rendering: geometricPrecision;
 }
 
