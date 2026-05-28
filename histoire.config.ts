@@ -31,6 +31,7 @@ export default defineConfig({
       { id: 'tech', title: 'Tech Architecture' },
       { id: 'report', title: 'Report Detail' },
       { id: 'history', title: 'History Workspace' },
+      { id: 'auth', title: 'Auth Pages' },
     ],
   },
   responsivePresets: [

@@ -11,7 +11,9 @@ const navigation = [
 ]
 
 const route = useRoute()
-const showPublicHeader = computed(() => route.meta.shell !== 'product')
+const showPublicHeader = computed(
+  () => route.meta.shell !== 'product' && route.meta.shell !== 'auth',
+)
 </script>
 
 <template>
