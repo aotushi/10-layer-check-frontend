@@ -11,10 +11,19 @@ const props = withDefaults(
     rows: HistoryRecord[]
     state?: HistoryTableState
     errorMessage?: string
+    emptyTitle?: string
+    emptyDescription?: string
+    emptyActionLabel?: string
+    emptyActionHref?: string
   }>(),
   {
     state: 'populated',
     errorMessage: 'History could not be loaded. Retry the query before changing filters.',
+    emptyTitle: 'No scan history yet',
+    emptyDescription:
+      'Start with a public domain scan. Saved reports will appear here when account persistence is connected.',
+    emptyActionLabel: 'Run first scan',
+    emptyActionHref: '/',
   },
 )
 
@@ -92,10 +101,10 @@ const showTable = computed(() => props.state === 'loading' || props.state === 'p
 
     <HistoryEmptyState
       v-else-if="state === 'empty'"
-      title="No scan history yet"
-      description="Start with a public domain scan. Saved reports will appear here when account persistence is connected."
-      action-label="Run first scan"
-      action-href="/"
+      :title="emptyTitle"
+      :description="emptyDescription"
+      :action-label="emptyActionLabel"
+      :action-href="emptyActionHref"
     />
 
     <HistoryEmptyState

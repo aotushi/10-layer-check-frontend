@@ -5,7 +5,7 @@ import HistoryPage from './HistoryPage.vue'
 <template>
   <Story title="History/HistoryPage" group="history">
     <Variant title="Full history workspace">
-      <HistoryPage />
+      <HistoryPage data-mode="sample" />
     </Variant>
   </Story>
 </template>

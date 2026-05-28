@@ -2,6 +2,7 @@
 import { computed } from 'vue'
 
 import PublicHeader from '@/components/shell/PublicHeader.vue'
+import { useAuthSubmit } from '@/composables/useAuthSubmit'
 import type { AuthFieldPayload, AuthMode } from '@/content/authPage'
 import { authPageCopies } from '@/content/authPage'
 
@@ -13,10 +14,14 @@ const props = defineProps<{
 }>()
 
 const page = computed(() => authPageCopies[props.mode])
+const authSubmit = useAuthSubmit(() => props.mode)
+const formVisualState = computed(() =>
+  authSubmit.visualState.value === 'idle' ? undefined : authSubmit.visualState.value,
+)
+const statusMessage = computed(() => authSubmit.errorMessage.value)
 
 function handleSubmit(_payload: AuthFieldPayload) {
-  void _payload
-  // Live auth wiring belongs in a future API task; this page keeps the visual contract stable.
+  void authSubmit.submitAuth(_payload)
 }
 </script>
 
@@ -36,6 +41,8 @@ function handleSubmit(_payload: AuthFieldPayload) {
           :switch-label="page.switchLabel"
           :switch-href="page.switchHref"
           :password-help="page.passwordHelp"
+          :status-message="statusMessage"
+          :visual-state="formVisualState"
           @submit="handleSubmit"
         />
 

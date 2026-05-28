@@ -5,9 +5,9 @@ test('history route renders the product history workspace', async ({ page }, tes
 
   await expect(page.getByRole('heading', { name: 'Scan history' })).toBeVisible()
   await expect(page.getByRole('heading', { name: 'Previous diagnostic runs' })).toBeVisible()
-  await expect(page.getByText('overreacted.io').first()).toBeVisible()
-  await expect(page.getByText('very-long-public-documentation-hostname').first()).toBeVisible()
-  await expect(page.getByRole('link', { name: 'Open report' }).first()).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'Login required' })).toBeVisible()
+  await expect(page.getByText('0 records')).toBeVisible()
+  await expect(page.getByRole('link', { name: 'Login' }).first()).toBeVisible()
   await expect(page.locator('.site-header')).toHaveCount(0)
 
   const hasHorizontalOverflow = await page.evaluate(
@@ -17,19 +17,14 @@ test('history route renders the product history workspace', async ({ page }, tes
 
   if (testInfo.project.name === 'mobile') {
     const mobileState = await page.evaluate(() => {
-      const tableScroll = document.querySelector('.history-table-scroll')
       const summary = document.querySelector('.history-summary')
       const summaryRect = summary?.getBoundingClientRect()
 
       return {
-        tableScrollsInternally: Boolean(
-          tableScroll && tableScroll.scrollWidth > tableScroll.clientWidth,
-        ),
         summaryInFirstViewport: Boolean(summaryRect && summaryRect.top < window.innerHeight),
       }
     })
 
-    expect(mobileState.tableScrollsInternally).toBe(true)
     expect(mobileState.summaryInFirstViewport).toBe(true)
   }
 })
