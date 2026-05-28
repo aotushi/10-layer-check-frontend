@@ -34,9 +34,9 @@ onMounted(async () => {
   />
 
   <main v-else class="case-missing">
-    <RouterLink to="/">10-Layer Check</RouterLink>
     <h1>Case study not found.</h1>
     <p>The requested proof artifact is not registered in the local case metadata.</p>
+    <RouterLink class="case-missing__action" to="/">Back to Home</RouterLink>
   </main>
 </template>
 
@@ -47,13 +47,8 @@ onMounted(async () => {
   padding: 80px var(--page-gutter);
 }
 
-.case-missing a {
-  color: var(--primary);
-  font-weight: 800;
-}
-
 .case-missing h1 {
-  margin: 54px 0 16px;
+  margin: 0 0 16px;
   color: var(--ink);
   font-size: clamp(40px, 7vw, 72px);
 }
@@ -63,5 +58,22 @@ onMounted(async () => {
   color: var(--ink-secondary);
   font-size: 18px;
   line-height: 1.6;
+}
+
+.case-missing__action {
+  display: inline-flex;
+  min-height: 42px;
+  align-items: center;
+  justify-content: center;
+  margin-top: 22px;
+  border: 1px solid var(--primary);
+  color: var(--primary);
+  padding: 0 18px;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.case-missing__action:hover {
+  background: var(--soft-primary);
 }
 </style>

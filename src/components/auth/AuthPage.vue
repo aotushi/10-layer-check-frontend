@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { RouterLink } from 'vue-router'
 
+import PublicHeader from '@/components/shell/PublicHeader.vue'
 import type { AuthFieldPayload, AuthMode } from '@/content/authPage'
 import { authPageCopies } from '@/content/authPage'
 
@@ -22,10 +22,7 @@ function handleSubmit(_payload: AuthFieldPayload) {
 
 <template>
   <main class="auth-page">
-    <header class="auth-page__header">
-      <RouterLink class="auth-page__brand" to="/">10-Layer Check</RouterLink>
-      <RouterLink class="auth-page__home" to="/">Back to Home</RouterLink>
-    </header>
+    <PublicHeader />
 
     <section class="auth-page__body" :aria-label="`${page.mode} account`">
       <div class="auth-page__grid">
@@ -54,6 +51,8 @@ function handleSubmit(_payload: AuthFieldPayload) {
 
 <style scoped>
 .auth-page {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
   min-height: 100vh;
   background:
     linear-gradient(180deg, var(--canvas) 0, var(--canvas) 58px, transparent 58px),
@@ -62,36 +61,10 @@ function handleSubmit(_payload: AuthFieldPayload) {
     var(--canvas-muted);
 }
 
-.auth-page__header {
-  display: flex;
-  min-height: 58px;
-  align-items: center;
-  justify-content: space-between;
-  border-bottom: 1px solid var(--border-hairline);
-  background: color-mix(in srgb, var(--canvas) 96%, transparent);
-  padding: 0 var(--page-gutter);
-}
-
-.auth-page__brand {
-  color: var(--primary);
-  font-size: 18px;
-  font-weight: 800;
-}
-
-.auth-page__home {
-  color: var(--ink-secondary);
-  font-size: 13px;
-  font-weight: 800;
-}
-
-.auth-page__home:hover {
-  color: var(--primary);
-}
-
 .auth-page__body {
   display: grid;
   width: min(100%, 980px);
-  min-height: calc(100vh - 58px);
+  min-height: 0;
   align-items: center;
   margin: 0 auto;
   padding: 42px var(--page-gutter) 48px;
@@ -118,14 +91,6 @@ function handleSubmit(_payload: AuthFieldPayload) {
 }
 
 @media (max-width: 560px) {
-  .auth-page__header {
-    min-height: 52px;
-  }
-
-  .auth-page__home {
-    font-size: 12px;
-  }
-
   .auth-page__body {
     min-height: auto;
     align-items: start;
