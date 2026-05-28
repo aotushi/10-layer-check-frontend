@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { shallowRef } from 'vue'
 
+import { useScanSubmit } from '@/composables/useScanSubmit'
 import { faqs } from '@/content/homePage'
 
 const finalDomain = shallowRef('example.com')
+const { canSubmit, errorMessage, isSubmitting, submitScan } = useScanSubmit()
 </script>
 
 <template>
@@ -29,10 +31,20 @@ const finalDomain = shallowRef('example.com')
         Input your primary domain to generate an immediate, engineering-grade evaluation of your
         external perimeter.
       </p>
-      <form class="final-cta__form" @submit.prevent>
-        <input v-model="finalDomain" aria-label="Target domain" type="text" />
-        <button type="submit">Scan domain</button>
+      <form class="final-cta__form" @submit.prevent="submitScan(finalDomain)">
+        <input
+          v-model="finalDomain"
+          aria-label="Target domain"
+          type="text"
+          :disabled="isSubmitting"
+        />
+        <button type="submit" :disabled="!canSubmit">
+          {{ isSubmitting ? 'Starting' : 'Scan domain' }}
+        </button>
       </form>
+      <p v-if="errorMessage" class="final-cta__message" role="status">
+        {{ errorMessage }}
+      </p>
     </div>
   </section>
 </template>
@@ -145,6 +157,24 @@ const finalDomain = shallowRef('example.com')
   font-weight: 700;
   letter-spacing: 0.02em;
   text-transform: uppercase;
+}
+
+.final-cta__form input:disabled,
+.final-cta__form button:disabled {
+  cursor: wait;
+  opacity: 0.72;
+}
+
+.final-cta__message {
+  max-width: 620px;
+  margin: 12px auto 0;
+  border-left: 3px solid var(--danger);
+  background: color-mix(in srgb, var(--danger) 6%, var(--canvas));
+  color: var(--danger);
+  padding: 9px 12px;
+  font-size: 13px;
+  line-height: 1.4;
+  text-align: left;
 }
 
 @media (max-width: 560px) {
