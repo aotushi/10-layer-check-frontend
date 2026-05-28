@@ -11,6 +11,8 @@ const props = withDefaults(
     eyebrow: string
     title: string
     lead: string
+    initialEmail?: string
+    initialPassword?: string
     submitLabel: string
     switchPrompt: string
     switchLabel: string
@@ -22,6 +24,8 @@ const props = withDefaults(
   {
     passwordHelp: undefined,
     statusMessage: undefined,
+    initialEmail: undefined,
+    initialPassword: undefined,
     visualState: undefined,
   },
 )
@@ -31,8 +35,8 @@ const emit = defineEmits<{
 }>()
 
 const fields = reactive({
-  email: props.visualState === 'validation-error' ? 'invalid-email' : 'reviewer@example.com',
-  password: props.visualState === 'validation-error' ? 'short' : 'correct-horse-battery',
+  email: props.visualState === 'validation-error' ? 'invalid-email' : (props.initialEmail ?? ''),
+  password: props.visualState === 'validation-error' ? 'short' : (props.initialPassword ?? ''),
 })
 
 const attempted = shallowRef(false)

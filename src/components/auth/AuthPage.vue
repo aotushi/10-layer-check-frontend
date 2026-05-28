@@ -40,6 +40,8 @@ function handleSubmit(_payload: AuthFieldPayload) {
           :eyebrow="page.eyebrow"
           :title="page.title"
           :lead="page.lead"
+          :initial-email="page.initialEmail"
+          :initial-password="page.initialPassword"
           :submit-label="page.submitLabel"
           :switch-prompt="page.switchPrompt"
           :switch-label="page.switchLabel"

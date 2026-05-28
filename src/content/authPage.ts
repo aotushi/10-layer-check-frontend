@@ -22,6 +22,8 @@ export type AuthPageCopy = {
   eyebrow: string
   title: string
   lead: string
+  initialEmail?: string
+  initialPassword?: string
   submitLabel: string
   switchPrompt: string
   switchLabel: string
@@ -38,6 +40,8 @@ export const authPageCopies = {
     eyebrow: 'Account access',
     title: 'Sign in to scan history',
     lead: 'Reopen previous diagnostic reports and continue technical review.',
+    initialEmail: 'demo@10-layer-check.test',
+    initialPassword: 'Demo_10Layer_Check_2026!',
     submitLabel: 'Login',
     switchPrompt: 'New to 10-Layer Check?',
     switchLabel: 'Create an account',
@@ -70,6 +74,8 @@ export const authPageCopies = {
     eyebrow: 'Account creation',
     title: 'Create a report account',
     lead: 'Save public diagnostic runs so the evidence trail stays available after a scan.',
+    initialEmail: undefined,
+    initialPassword: undefined,
     submitLabel: 'Create account',
     switchPrompt: 'Already have an account?',
     switchLabel: 'Login',
