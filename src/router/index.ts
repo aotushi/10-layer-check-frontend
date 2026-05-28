@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
 
+import HistoryView from '@/views/HistoryView.vue'
 import HomeView from '@/views/HomeView.vue'
 import LayerModelView from '@/views/LayerModelView.vue'
 import PlaceholderView from '@/views/PlaceholderView.vue'
@@ -44,10 +45,9 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/dashboard/history',
     name: 'history',
-    component: PlaceholderView,
-    props: {
-      title: 'History',
-      description: 'Authenticated table-first scan history view.',
+    component: HistoryView,
+    meta: {
+      shell: 'product',
     },
   },
   {

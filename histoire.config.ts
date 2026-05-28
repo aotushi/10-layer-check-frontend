@@ -30,6 +30,7 @@ export default defineConfig({
       { id: 'landing', title: '10-Layer Model' },
       { id: 'tech', title: 'Tech Architecture' },
       { id: 'report', title: 'Report Detail' },
+      { id: 'history', title: 'History Workspace' },
     ],
   },
   responsivePresets: [
