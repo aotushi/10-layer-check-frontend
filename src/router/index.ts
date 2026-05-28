@@ -3,6 +3,7 @@ import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
 import HomeView from '@/views/HomeView.vue'
 import LayerModelView from '@/views/LayerModelView.vue'
 import PlaceholderView from '@/views/PlaceholderView.vue'
+import ReportDetailView from '@/views/ReportDetailView.vue'
 import TechView from '@/views/TechView.vue'
 
 const routes: RouteRecordRaw[] = [
@@ -52,10 +53,9 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/dashboard/reports/:id',
     name: 'report-detail',
-    component: PlaceholderView,
-    props: {
-      title: 'Report Detail',
-      description: 'Detailed report view for findings, evidence rows, and layer status.',
+    component: ReportDetailView,
+    meta: {
+      shell: 'product',
     },
   },
   {

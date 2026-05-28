@@ -29,6 +29,7 @@ export default defineConfig({
       { id: 'home', title: 'Home Sections' },
       { id: 'landing', title: '10-Layer Model' },
       { id: 'tech', title: 'Tech Architecture' },
+      { id: 'report', title: 'Report Detail' },
     ],
   },
   responsivePresets: [

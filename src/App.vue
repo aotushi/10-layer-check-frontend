@@ -1,5 +1,7 @@
 <script setup lang="ts">
+import { computed } from 'vue'
 import { RouterLink, RouterView } from 'vue-router'
+import { useRoute } from 'vue-router'
 
 const navigation = [
   { to: '/', label: 'Home' },
@@ -7,11 +9,14 @@ const navigation = [
   { to: '/tech', label: 'Tech' },
   { to: '/login', label: 'Login' },
 ]
+
+const route = useRoute()
+const showPublicHeader = computed(() => route.meta.shell !== 'product')
 </script>
 
 <template>
   <div class="app-shell">
-    <header class="site-header">
+    <header v-if="showPublicHeader" class="site-header">
       <div class="site-header__inner">
         <RouterLink class="site-brand" to="/">10-Layer Check</RouterLink>
         <nav class="site-nav" aria-label="Primary navigation">

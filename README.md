@@ -22,6 +22,7 @@ Primary UI contract:
 
 ## Page Status
 
-| Page              | Route   | Status   | Notes                                                                                                                                                                                |
-| ----------------- | ------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Tech architecture | `/tech` | complete | Implemented as Hero, workflow pipeline, system architecture map, report artifact anatomy, and bounded trust CTA. Local checks passed: format, lint, build, and Histoire story build. |
+| Page              | Route                    | Status   | Notes                                                                                                                                                                                |
+| ----------------- | ------------------------ | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Tech architecture | `/tech`                  | complete | Implemented as Hero, workflow pipeline, system architecture map, report artifact anatomy, and bounded trust CTA. Local checks passed: format, lint, build, and Histoire story build. |
+| Report detail     | `/dashboard/reports/:id` | complete | Implemented as a product report shell using typed distilled sample data, visible evidence refs, missing data, Histoire story, and Playwright visual baselines.                       |

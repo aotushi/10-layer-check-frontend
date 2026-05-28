@@ -9,19 +9,27 @@ test('tech route renders the documented architecture page', async ({ page }, tes
     }),
   ).toBeVisible()
   await expect(
-    page.getByRole('heading', { name: /what each part of the system owns/i }),
+    page.getByRole('heading', { name: /public domain to evidence-backed report artifact/i }),
   ).toBeVisible()
   await expect(
-    page.getByRole('heading', { name: /frontend, backend, database, ai, seo, and quality stack/i }),
+    page.getByRole('heading', { name: /runtime boundaries behind the pipeline/i }),
   ).toBeVisible()
-  await expect(page.getByText('Vue 3').first()).toBeVisible()
-  await expect(page.getByText('Cloudflare Worker API').first()).toBeVisible()
-  await expect(page.getByText('D1').first()).toBeVisible()
-  await expect(page.getByText('Workers AI').first()).toBeVisible()
-  await expect(page.getByText('Frontend SEO').first()).toBeVisible()
-  await expect(page.getByText('Histoire').first()).toBeVisible()
-  await expect(page.getByText('Playwright').first()).toBeVisible()
-  await expect(page.getByText('SEO as engineering quality').first()).toBeVisible()
+  await expect(
+    page.getByRole('heading', { name: /how evidence becomes a readable technical report/i }),
+  ).toBeVisible()
+  await expect(page.locator('.architecture-card').filter({ hasText: 'Vue 3' })).toBeVisible()
+  await expect(
+    page.locator('.architecture-card').filter({ hasText: 'Cloudflare Worker API' }),
+  ).toBeVisible()
+  await expect(
+    page.locator('.architecture-card').filter({ hasText: 'D1 and KV storage' }),
+  ).toBeVisible()
+  await expect(page.locator('.architecture-card').filter({ hasText: 'Workers AI' })).toBeVisible()
+  await expect(page.locator('.pipeline-map text').filter({ hasText: 'Histoire' })).toBeVisible()
+  await expect(page.locator('.pipeline-map text').filter({ hasText: 'Playwright' })).toBeVisible()
+  await expect(
+    page.locator('.architecture-card').filter({ hasText: 'SEO-safe public artifact' }),
+  ).toBeVisible()
 
   const hasHorizontalOverflow = await page.evaluate(
     () => document.documentElement.scrollWidth > document.documentElement.clientWidth,
