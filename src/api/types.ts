@@ -1,10 +1,16 @@
 export type ApiJsonPrimitive = string | number | boolean | null
 export type ApiJsonValue = ApiJsonPrimitive | ApiJsonValue[] | { [key: string]: ApiJsonValue }
 export type ApiJsonRecord = Record<string, ApiJsonValue>
+export type ApiHttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE'
+export type ApiQueryPrimitive = string | number | boolean | null | undefined
+export type ApiQueryValue = ApiQueryPrimitive | ApiQueryPrimitive[]
+export type ApiQueryParams = Record<string, ApiQueryValue>
 
 export type ApiRequestOptions = {
-  method?: 'GET' | 'POST'
+  method?: ApiHttpMethod
   body?: ApiJsonRecord
+  query?: ApiQueryParams
+  headers?: HeadersInit
   signal?: AbortSignal
 }
 
