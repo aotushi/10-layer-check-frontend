@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { architectureStats, topologyGroups } from '@/content/techPage'
+import { architectureStats, runtimeTrace } from '@/content/techPage'
 </script>
 
 <template>
@@ -29,18 +29,21 @@ import { architectureStats, topologyGroups } from '@/content/techPage'
         </div>
       </div>
 
-      <aside class="topology-board" aria-label="System topology">
-        <div class="topology-board__header">
-          <span>Architecture atlas</span>
+      <aside class="runtime-board" aria-label="Runtime trace preview">
+        <div class="runtime-board__header">
+          <span>Runtime trace</span>
           <code>pages -> worker -> data -> report</code>
         </div>
-        <div class="topology-board__grid">
-          <article v-for="group in topologyGroups" :key="group.title" class="topology-node">
-            <small>{{ group.zone }}</small>
-            <h2>{{ group.title }}</h2>
-            <p class="topology-node__tech">{{ group.tech }}</p>
-            <p>{{ group.responsibility }}</p>
-          </article>
+        <ol class="runtime-board__steps">
+          <li v-for="item in runtimeTrace" :key="item.label">
+            <span>{{ item.label }}</span>
+            <strong>{{ item.value }}</strong>
+          </li>
+        </ol>
+        <div class="runtime-board__notes">
+          <span>facts before prose</span>
+          <span>public evidence only</span>
+          <span>missing data explicit</span>
         </div>
       </aside>
     </div>
@@ -146,13 +149,13 @@ import { architectureStats, topologyGroups } from '@/content/techPage'
   color: #dbeafe;
 }
 
-.topology-board {
+.runtime-board {
   border: 1px solid var(--border-dark);
   background: #0f1b31;
   padding: 16px;
 }
 
-.topology-board__header {
+.runtime-board__header {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -166,7 +169,7 @@ import { architectureStats, topologyGroups } from '@/content/techPage'
   text-transform: uppercase;
 }
 
-.topology-board__header code {
+.runtime-board__header code {
   border: 1px solid var(--border-dark);
   padding: 4px 8px;
   color: #93c5fd;
@@ -176,43 +179,72 @@ import { architectureStats, topologyGroups } from '@/content/techPage'
   text-transform: none;
 }
 
-.topology-board__grid {
+.runtime-board__steps {
   display: grid;
-  gap: 10px;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  margin-top: 14px;
+  gap: 0;
+  margin: 16px 0 0;
+  padding: 0;
+  list-style: none;
 }
 
-.topology-node {
-  border: 1px solid var(--border-dark);
+.runtime-board__steps li {
+  position: relative;
+  display: grid;
+  gap: 4px;
+  grid-template-columns: 96px minmax(0, 1fr);
+  border-top: 1px solid var(--border-dark);
+  padding: 13px 0 13px 22px;
+}
+
+.runtime-board__steps li::before {
+  position: absolute;
+  top: 19px;
+  left: 0;
+  width: 8px;
+  height: 8px;
+  border: 1px solid #60a5fa;
   background: var(--canvas-dark);
-  padding: 12px;
+  content: '';
 }
 
-.topology-node small {
-  color: #60a5fa;
+.runtime-board__steps li:not(:last-child)::after {
+  position: absolute;
+  top: 27px;
+  bottom: -19px;
+  left: 4px;
+  width: 1px;
+  background: var(--border-dark);
+  content: '';
+}
+
+.runtime-board__steps span {
+  color: #93c5fd;
   font-family: ui-monospace, 'SFMono-Regular', Consolas, monospace;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 700;
   text-transform: uppercase;
 }
 
-.topology-node h2 {
-  margin: 8px 0 0;
+.runtime-board__steps strong {
   color: var(--ink-inverse);
   font-size: 16px;
+  font-weight: 700;
 }
 
-.topology-node p {
-  margin: 8px 0 0;
+.runtime-board__notes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.runtime-board__notes span {
+  border: 1px solid var(--border-dark);
+  background: var(--canvas-dark);
+  padding: 6px 8px;
   color: #cbd5e1;
   font-size: 12px;
-  line-height: 1.45;
-}
-
-.topology-node__tech {
-  color: #93c5fd;
-  font-family: ui-monospace, 'SFMono-Regular', Consolas, monospace;
+  font-weight: 700;
 }
 
 @media (max-width: 900px) {
@@ -251,39 +283,45 @@ import { architectureStats, topologyGroups } from '@/content/techPage'
     margin-top: 18px;
   }
 
-  .topology-board {
+  .runtime-board {
     padding: 10px;
   }
 
-  .topology-board__header {
+  .runtime-board__header {
     display: grid;
     gap: 8px;
   }
 
-  .topology-board__grid {
-    gap: 8px;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+  .runtime-board__steps {
     margin-top: 10px;
   }
 
-  .topology-node {
-    padding: 8px;
+  .runtime-board__steps li {
+    grid-template-columns: 74px minmax(0, 1fr);
+    padding: 9px 0 9px 18px;
   }
 
-  .topology-node h2 {
-    font-size: 13px;
+  .runtime-board__steps li::before {
+    top: 14px;
   }
 
-  .topology-node p {
-    margin-top: 5px;
+  .runtime-board__steps li:not(:last-child)::after {
+    top: 22px;
+    bottom: -14px;
+  }
+
+  .runtime-board__steps span,
+  .runtime-board__notes span {
     font-size: 10px;
   }
 
-  .topology-node p:not(.topology-node__tech) {
-    display: -webkit-box;
-    overflow: hidden;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 1;
+  .runtime-board__steps strong {
+    font-size: 13px;
+  }
+
+  .runtime-board__notes {
+    gap: 6px;
+    margin-top: 8px;
   }
 }
 </style>

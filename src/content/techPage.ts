@@ -5,50 +5,24 @@ export const architectureStats = [
   ['Reporting', 'Evidence-bound AI'],
 ] as const
 
-export const topologyGroups = [
+export const runtimeTrace = [
   {
-    zone: 'Public client',
-    title: 'Vue application shell',
-    tech: 'Vue 3, Vite, Router, Pinia, pinia-colada',
-    responsibility:
-      'Renders public pages, scan entry, report surfaces, route-level metadata, and cached server state.',
+    label: 'Input',
+    value: 'Public domain',
   },
   {
-    zone: 'API edge',
-    title: 'Cloudflare Worker API',
-    tech: 'Workers, typed request handlers, response shaping',
-    responsibility:
-      'Validates domain input, creates scan jobs, applies execution boundaries, and returns normalized payloads.',
+    label: 'Edge',
+    value: 'Worker scan job',
   },
   {
-    zone: 'Diagnostic core',
-    title: '10-layer scan engine',
-    tech: 'DNS, BGP, TLS, HTTP, header, payload, DOM probes',
-    responsibility:
-      'Collects externally observable evidence without authenticated crawling or exploit execution.',
+    label: 'Evidence',
+    value: '10-layer probes',
   },
   {
-    zone: 'Persistence',
-    title: 'Report data plane',
-    tech: 'D1 records, KV public-observation cache',
-    responsibility:
-      'Stores scan jobs, findings, evidence references, cacheable observations, and report state.',
+    label: 'Artifact',
+    value: 'Report UI',
   },
-  {
-    zone: 'Interpretation',
-    title: 'Workers AI reporting',
-    tech: 'Evidence summaries, boundary language, missing-data notes',
-    responsibility:
-      'Converts structured evidence into readable explanations without inventing unsupported facts.',
-  },
-  {
-    zone: 'Delivery and quality',
-    title: 'Operations rail',
-    tech: 'Cloudflare Pages, GitHub Actions, Histoire, Playwright',
-    responsibility:
-      'Ships the frontend, verifies component states, checks responsive layouts, and keeps deployments repeatable.',
-  },
-]
+] as const
 
 export type WorkflowNodeKind =
   | 'entry'
@@ -166,138 +140,129 @@ export const workflowDiagramNodes = [
   },
 ] satisfies WorkflowDiagramNode[]
 
-export const systemDomains = [
+export const systemArchitectureGroups = [
   {
-    title: 'Frontend engineering',
-    subtitle: 'Public app, routing, state, and presentation quality',
+    zone: 'Public interface',
+    title: 'Vue application shell',
+    stack: 'Vue 3, Vite, Router, Pinia, pinia-colada',
     items: [
-      'Vue 3 SFCs with route-level composition surfaces',
-      'Vite build for Cloudflare Pages deployment',
-      'Pinia and pinia-colada for app and server-state boundaries',
-      'Semantic HTML, route metadata, Open Graph, sitemap, and Web Vitals budget',
+      'Componentized page sections',
+      'Request composables and cached server state',
+      'Route metadata for public pages',
     ],
   },
   {
-    title: 'Backend and scan orchestration',
-    subtitle: 'API edge, job lifecycle, and diagnostic execution',
+    zone: 'API boundary',
+    title: 'Cloudflare Worker API',
+    stack: 'Workers, typed request handlers, response shaping',
     items: [
-      'Cloudflare Worker handlers for validation and response shaping',
-      'Scan job lifecycle from accepted request to persisted report',
-      '10-layer probe plan with explicit public-observation boundaries',
-      'Error, timeout, rate-limit, and missing-data paths exposed to the report',
+      'Validate public domain input',
+      'Create bounded scan jobs',
+      'Expose timeout and rate-limit states',
     ],
   },
   {
-    title: 'Data and reporting',
-    subtitle: 'Storage model, evidence refs, and AI interpretation',
+    zone: 'Evidence execution',
+    title: '10-layer probe engine',
+    stack: 'DNS, BGP, TLS, HTTP, headers, content, runtime probes',
     items: [
-      'D1 stores jobs, findings, report sections, and evidence metadata',
-      'KV stores cacheable public observations and short-lived status material',
-      'Workers AI summarizes structured evidence without adding unsupported claims',
-      'Report payloads separate observed facts, warnings, failures, and unknowns',
+      'Run externally observable checks',
+      'Normalize findings and missing-data notes',
+      'Avoid authenticated crawling or exploit execution',
     ],
   },
   {
-    title: 'Operations and quality',
-    subtitle: 'Deployment, observability, and regression protection',
+    zone: 'Data plane',
+    title: 'D1 and KV storage',
+    stack: 'D1 records, KV public-observation cache',
     items: [
-      'Cloudflare Pages ships the frontend while Workers host the API boundary',
-      'GitHub Actions runs typecheck, lint, unit, stories, visual tests, and build',
-      'Histoire reviews base/page components before page assembly',
-      'Playwright verifies desktop, tablet, mobile, screenshots, and overflow gates',
+      'Persist jobs, findings, and report sections',
+      'Cache reusable public observations',
+      'Keep facts separate from generated prose',
     ],
   },
-]
-
-export const stackMatrix = [
-  [
-    'UI runtime',
-    'Vue 3 + Vite',
-    'Route composition and componentized public surfaces',
-    'Fast Pages build, typed SFC workflow, stable SPA shell',
-  ],
-  [
-    'State layer',
-    'Pinia + pinia-colada',
-    'Separates app state from server scan/report state',
-    'Keeps report fetching cacheable and inspectable',
-  ],
-  [
-    'Frontend SEO',
-    'Semantic HTML + route metadata',
-    'Makes public pages and case/report surfaces discoverable',
-    'Supports title, description, canonical, Open Graph, sitemap, robots',
-  ],
-  [
-    'API runtime',
-    'Cloudflare Workers',
-    'Runs validation, scan orchestration, and response shaping at the edge',
-    'Fits short-lived public diagnostic requests',
-  ],
-  [
-    'Database',
-    'D1',
-    'Persists scan jobs, findings, report sections, and evidence metadata',
-    'SQL-shaped records remain queryable for history and reports',
-  ],
-  [
-    'Cache',
-    'KV',
-    'Stores reusable public observations and temporary status material',
-    'Reduces repeated public lookups without becoming source of truth',
-  ],
-  [
-    'AI interpretation',
-    'Workers AI',
-    'Writes evidence-backed report explanations',
-    'Prompt boundary can require citations to collected facts',
-  ],
-  [
-    'Quality system',
-    'Histoire + Playwright',
-    'Reviews components and locks responsive screenshots',
-    'Catches UI drift before deployment',
-  ],
+  {
+    zone: 'Interpretation',
+    title: 'Workers AI report layer',
+    stack: 'Evidence summaries, boundary language, missing-data notes',
+    items: [
+      'Explain only collected evidence',
+      'Preserve uncertainty and missing data',
+      'Produce report copy from structured sections',
+    ],
+  },
+  {
+    zone: 'Artifact surface',
+    title: 'Report UI',
+    stack: 'History route, SEO-safe public artifact, evidence references',
+    items: [
+      'Render readable report sections',
+      'Expose evidence-backed technical detail',
+      'Keep scan results reusable and shareable',
+    ],
+  },
 ] as const
 
-export const architectureDecisions = [
+export const reportArtifactFlow = [
   {
-    decision: 'Public evidence boundary',
-    reason: 'The product evaluates externally observable website behavior.',
-    tradeoff: 'It does not claim private topology, ownership, or exploitability.',
+    title: 'Evidence packet',
+    body: 'Findings, evidence refs, status, and missing-data refs are normalized before any narrative text exists.',
+    chips: ['E### refs', 'M### refs', 'status'],
   },
   {
-    decision: 'Report data before report prose',
-    reason: 'Findings, evidence refs, and missing-data notes are normalized first.',
-    tradeoff: 'AI output is constrained, so reports favor traceability over drama.',
+    title: 'Section contract',
+    body: 'The report groups evidence into stable topics rather than one raw section per probe layer.',
+    chips: ['technology_stack', 'request_chain', 'security_posture'],
   },
   {
-    decision: 'Component-first UI review',
-    reason: 'Histoire makes base and page sections inspectable before full-page assembly.',
-    tradeoff: 'Design work has an extra gate, but fewer page-level regressions escape.',
+    title: 'Narrative assembly',
+    body: 'Workers AI explains the supplied facts, cites known refs, and keeps missing data explicit.',
+    chips: ['fact-bound', 'no invented claims', 'uncertainty'],
   },
-]
-
-export const qualityRails = [
-  ['Type safety', 'vue-tsc verifies route, component, and content contracts.'],
-  ['Code quality', 'ESLint and Prettier keep the implementation consistent.'],
-  ['Component review', 'Histoire documents base, home, model, and tech sections.'],
-  ['Visual regression', 'Playwright locks desktop, tablet, and mobile screenshots.'],
-  ['Network determinism', 'MSW supplies stable mocked responses for tests.'],
-  ['Deployment', 'Cloudflare Pages and Workers keep frontend and API boundaries separate.'],
 ] as const
 
-export const dataBoundaries = [
+export const reportArtifactSections = [
   {
-    title: 'No private inventory claim',
-    body: 'The system does not infer private origin topology, ownership, or hidden assets from public signals.',
+    id: 'summary',
+    title: 'Summary',
+    body: 'High-level result, confidence, and immediate risk signals.',
   },
   {
-    title: 'Evidence-backed AI',
-    body: 'Workers AI can explain collected evidence, missing data, and risk language, but not invent findings.',
+    id: 'public_information_architecture',
+    title: 'Public information architecture',
+    body: 'Public routes, content maps, and observable site structure.',
   },
   {
-    title: 'SEO as engineering quality',
-    body: 'Public pages should expose semantic structure, metadata, canonical URLs, sitemap entries, and fast Web Vitals.',
+    id: 'technology_stack',
+    title: 'Technology stack',
+    body: 'Frontend or application technologies only when evidence supports them.',
   },
-]
+  {
+    id: 'request_rendering_chain',
+    title: 'Request rendering chain',
+    body: 'How public requests resolve, render, redirect, or fail.',
+  },
+  {
+    id: 'api_protocol_surface',
+    title: 'API and protocol surface',
+    body: 'CORS, access-control, protocol, and API response signals.',
+  },
+  {
+    id: 'security_posture',
+    title: 'Security posture',
+    body: 'Headers, cookies, TLS, and browser-observable runtime risks.',
+  },
+  {
+    id: 'missing_data_next_steps',
+    title: 'Missing data and next steps',
+    body: 'What was not observable and what should be verified with authorization.',
+  },
+] as const
+
+export const trustBoundaries = [
+  'Public evidence only',
+  'No private inventory claim',
+  'No exploitability confirmation',
+  'AI cannot invent findings',
+  'Missing data remains explicit',
+] as const

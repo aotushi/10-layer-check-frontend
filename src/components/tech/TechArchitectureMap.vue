@@ -1,27 +1,30 @@
 <script setup lang="ts">
-import { systemDomains } from '@/content/techPage'
+import { systemArchitectureGroups } from '@/content/techPage'
 </script>
 
 <template>
-  <section class="domain-section">
-    <div class="page-inner domain-section__grid">
-      <div class="domain-section__intro">
-        <p>Architecture domains</p>
-        <h2>What each part of the system owns</h2>
+  <section class="architecture-section">
+    <div class="page-inner architecture-section__grid">
+      <div class="architecture-section__intro">
+        <p>System architecture map</p>
+        <h2>Runtime boundaries behind the pipeline</h2>
         <span>
-          The page separates product runtime concerns from implementation concerns: frontend
-          presentation, backend orchestration, data/reporting, and operations quality.
+          This map shows ownership boundaries. The pipeline explains how a request flows; this
+          section shows which subsystem owns each responsibility.
         </span>
       </div>
 
-      <div class="domain-board">
-        <article v-for="domain in systemDomains" :key="domain.title" class="domain-card">
-          <div>
-            <h3>{{ domain.title }}</h3>
-            <p>{{ domain.subtitle }}</p>
-          </div>
+      <div class="architecture-board" aria-label="System architecture ownership map">
+        <article
+          v-for="group in systemArchitectureGroups"
+          :key="group.title"
+          class="architecture-card"
+        >
+          <small>{{ group.zone }}</small>
+          <h3>{{ group.title }}</h3>
+          <code>{{ group.stack }}</code>
           <ul>
-            <li v-for="item in domain.items" :key="item">{{ item }}</li>
+            <li v-for="item in group.items" :key="item">{{ item }}</li>
           </ul>
         </article>
       </div>
@@ -30,158 +33,174 @@ import { systemDomains } from '@/content/techPage'
 </template>
 
 <style scoped>
-.domain-section {
+.architecture-section {
   border-bottom: 1px solid var(--border-hairline);
   background: var(--canvas);
   padding: var(--section-y) var(--page-gutter);
 }
 
-.domain-section__grid {
+.architecture-section__grid {
   display: grid;
-  gap: 38px;
-  grid-template-columns: minmax(240px, 0.36fr) minmax(0, 1fr);
+  gap: 34px;
+  grid-template-columns: minmax(240px, 0.34fr) minmax(0, 1fr);
 }
 
-.domain-section__intro {
+.architecture-section__intro {
   position: sticky;
   top: 96px;
   align-self: start;
 }
 
-.domain-section__intro p {
+.architecture-section__intro p {
   margin: 0 0 10px;
   color: var(--primary);
   font-size: 12px;
-  font-weight: 700;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.architecture-section__intro h2 {
+  margin: 0;
+  color: var(--ink);
+  font-size: clamp(24px, 3vw, 32px);
+  line-height: 1.16;
+}
+
+.architecture-section__intro span {
+  display: block;
+  margin-top: 14px;
+  color: var(--ink-secondary);
+  font-size: 15px;
+  line-height: 1.58;
+}
+
+.architecture-board {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.architecture-card {
+  display: grid;
+  align-content: start;
+  gap: 10px;
+  border: 1px solid var(--border-hairline);
+  background: var(--canvas-soft);
+  padding: 14px;
+}
+
+.architecture-card small {
+  color: var(--primary);
+  font-size: 11px;
+  font-weight: 800;
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
-.domain-section__intro h2 {
+.architecture-card h3 {
   margin: 0;
   color: var(--ink);
-  font-size: 28px;
-  line-height: 1.2;
+  font-size: 17px;
+  line-height: 1.22;
 }
 
-.domain-section__intro span {
-  display: block;
-  margin-top: 16px;
-  color: var(--ink-secondary);
-  font-size: 15px;
-  line-height: 1.6;
-}
-
-.domain-board {
-  display: grid;
-  gap: 14px;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-}
-
-.domain-card {
-  display: grid;
-  gap: 16px;
+.architecture-card code {
   border: 1px solid var(--border-hairline);
-  background: var(--canvas-soft);
-  padding: 18px;
+  background: var(--canvas);
+  padding: 7px;
+  color: var(--ink-secondary);
+  font-family: ui-monospace, 'SFMono-Regular', Consolas, monospace;
+  font-size: 11px;
+  line-height: 1.35;
+  white-space: normal;
 }
 
-.domain-card h3 {
-  margin: 0;
-  color: var(--ink);
-  font-size: 18px;
-}
-
-.domain-card p {
-  margin: 8px 0 0;
-  color: var(--primary);
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.03em;
-}
-
-.domain-card ul {
+.architecture-card ul {
   display: grid;
-  gap: 9px;
+  gap: 7px;
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
-.domain-card li {
+.architecture-card li {
   border-top: 1px solid var(--border-hairline);
-  padding-top: 9px;
+  padding-top: 7px;
   color: var(--ink-secondary);
-  font-size: 13px;
-  line-height: 1.45;
+  font-size: 12px;
+  line-height: 1.38;
+}
+
+@media (max-width: 1020px) {
+  .architecture-board {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 @media (max-width: 900px) {
-  .domain-section__grid {
+  .architecture-section__grid {
     grid-template-columns: 1fr;
   }
 
-  .domain-section__intro {
+  .architecture-section__intro {
     position: static;
   }
 }
 
-@media (max-width: 640px) {
-  .domain-board {
-    grid-template-columns: 1fr;
-  }
-}
-
 @media (max-width: 560px) {
-  .domain-section {
+  .architecture-section {
     padding-block: 26px;
   }
 
-  .domain-section__grid {
+  .architecture-section__grid {
     gap: 16px;
   }
 
-  .domain-section__intro h2 {
-    font-size: 22px;
-  }
-
-  .domain-section__intro span {
-    margin-top: 10px;
+  .architecture-section__intro span {
+    margin-top: 9px;
     font-size: 13px;
     line-height: 1.45;
   }
 
-  .domain-board {
+  .architecture-board {
     gap: 8px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .domain-card {
-    gap: 10px;
-    padding: 10px;
+  .architecture-card {
+    gap: 6px;
+    padding: 8px;
   }
 
-  .domain-card h3 {
-    font-size: 15px;
+  .architecture-card h3 {
+    font-size: 13px;
   }
 
-  .domain-card p {
-    margin-top: 5px;
+  .architecture-card code {
+    padding: 6px;
+    overflow: hidden;
+    font-size: 10px;
+    line-height: 1.25;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
-  .domain-card ul {
-    gap: 5px;
+  .architecture-card ul {
+    gap: 4px;
   }
 
-  .domain-card li {
+  .architecture-card li {
     display: -webkit-box;
     overflow: hidden;
-    padding-top: 5px;
+    padding-top: 4px;
+    font-size: 10px;
+    line-height: 1.25;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 1;
-    font-size: 12px;
   }
 
-  .domain-card li:nth-child(n + 3) {
+  .architecture-card li:nth-child(n + 3) {
     display: none;
   }
 }

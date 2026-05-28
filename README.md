@@ -19,3 +19,9 @@ Primary UI contract:
 - `npm run test:stories` builds Histoire stories.
 - `npm run build` creates the Pages artifact in `dist/`.
 - `npm run deploy:pages` deploys `dist/` to Cloudflare Pages.
+
+## Page Status
+
+| Page              | Route   | Status   | Notes                                                                                                                                                                                |
+| ----------------- | ------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Tech architecture | `/tech` | complete | Implemented as Hero, workflow pipeline, system architecture map, report artifact anatomy, and bounded trust CTA. Local checks passed: format, lint, build, and Histoire story build. |

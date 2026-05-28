@@ -5,7 +5,7 @@ import TechArchitectureMap from './TechArchitectureMap.vue'
 import TechBoundaryCta from './TechBoundaryCta.vue'
 import TechFlowMap from './TechFlowMap.vue'
 import TechHero from './TechHero.vue'
-import TechStackDecisions from './TechStackDecisions.vue'
+import TechReportArtifact from './TechReportArtifact.vue'
 </script>
 
 <template>
@@ -13,7 +13,7 @@ import TechStackDecisions from './TechStackDecisions.vue'
     <TechHero />
     <TechFlowMap />
     <TechArchitectureMap />
-    <TechStackDecisions />
+    <TechReportArtifact />
     <TechBoundaryCta />
   </main>
   <HomeFooter />

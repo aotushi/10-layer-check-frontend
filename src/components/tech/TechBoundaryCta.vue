@@ -1,152 +1,95 @@
 <script setup lang="ts">
-import { dataBoundaries, qualityRails } from '@/content/techPage'
+import { trustBoundaries } from '@/content/techPage'
 </script>
 
 <template>
-  <section class="ops-section">
-    <div class="page-inner ops-section__grid">
-      <div class="ops-panel">
-        <p class="ops-panel__eyebrow">Operations rail</p>
-        <h2>Quality gates from component review to deployment</h2>
-        <div class="quality-grid">
-          <article v-for="[name, body] in qualityRails" :key="name" class="quality-card">
-            <h3>{{ name }}</h3>
-            <p>{{ body }}</p>
-          </article>
-        </div>
-      </div>
-
-      <aside class="boundary-panel" aria-label="Architecture boundaries">
-        <h2>Technical boundaries</h2>
-        <article v-for="item in dataBoundaries" :key="item.title" class="boundary-card">
-          <h3>{{ item.title }}</h3>
-          <p>{{ item.body }}</p>
-        </article>
-      </aside>
-    </div>
-  </section>
-
   <section class="tech-cta">
     <div class="page-inner tech-cta__inner">
-      <h2>Inspect the architecture through a real scan report</h2>
-      <p>
-        Run a public-domain scan, then trace how frontend state, Worker orchestration, evidence
-        storage, and report generation appear in the final artifact.
-      </p>
-      <div class="tech-cta__actions">
-        <RouterLink class="tech-cta__primary" to="/">Run scan</RouterLink>
-        <RouterLink class="tech-cta__secondary" to="/10-layer-model">
-          View 10-layer model
-        </RouterLink>
+      <div class="tech-cta__copy">
+        <p>Bounded trust</p>
+        <h2>Inspect the architecture through a real scan report</h2>
+      </div>
+
+      <div class="tech-cta__aside">
+        <div class="trust-strip" aria-label="Technical trust boundaries">
+          <span v-for="item in trustBoundaries" :key="item">{{ item }}</span>
+        </div>
+        <div class="tech-cta__actions">
+          <RouterLink class="tech-cta__primary" to="/">Run scan</RouterLink>
+          <RouterLink class="tech-cta__secondary" to="/10-layer-model">
+            View 10-layer model
+          </RouterLink>
+        </div>
       </div>
     </div>
   </section>
 </template>
 
 <style scoped>
-.ops-section,
 .tech-cta {
   border-bottom: 1px solid var(--border-hairline);
-  padding: var(--section-y) var(--page-gutter);
-}
-
-.ops-section {
-  background: var(--canvas-muted);
-}
-
-.ops-section__grid {
-  display: grid;
-  gap: 22px;
-  grid-template-columns: minmax(0, 1fr) minmax(300px, 0.42fr);
-}
-
-.ops-panel,
-.boundary-panel {
-  border: 1px solid var(--border-hairline);
   background: var(--canvas);
-  padding: 20px;
-}
-
-.ops-panel__eyebrow {
-  margin: 0 0 8px;
-  color: var(--primary);
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.ops-panel h2,
-.boundary-panel h2 {
-  margin: 0;
-  color: var(--ink);
-  font-size: 24px;
-  line-height: 1.25;
-}
-
-.quality-grid {
-  display: grid;
-  gap: 10px;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  margin-top: 18px;
-}
-
-.quality-card,
-.boundary-card {
-  border: 1px solid var(--border-hairline);
-  background: var(--canvas-soft);
-  padding: 12px;
-}
-
-.quality-card h3,
-.boundary-card h3 {
-  margin: 0;
-  color: var(--primary);
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-}
-
-.quality-card p,
-.boundary-card p {
-  margin: 8px 0 0;
-  color: var(--ink-secondary);
-  font-size: 13px;
-  line-height: 1.45;
-}
-
-.boundary-panel {
-  display: grid;
-  align-content: start;
-  gap: 10px;
-}
-
-.tech-cta {
-  background: var(--canvas);
+  padding: 48px var(--page-gutter);
 }
 
 .tech-cta__inner {
-  text-align: center;
+  display: grid;
+  align-items: center;
+  gap: 28px 44px;
+  grid-template-columns: minmax(280px, 0.9fr) minmax(360px, 0.7fr);
 }
 
+.tech-cta p,
 .tech-cta h2 {
   margin: 0;
-  color: var(--ink);
-  font-size: clamp(28px, 3.8vw, 40px);
 }
 
 .tech-cta p {
+  color: var(--primary);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.tech-cta h2 {
   max-width: 720px;
-  margin: 14px auto 24px;
+  margin-top: 10px;
+  color: var(--ink);
+  font-size: clamp(28px, 3.2vw, 38px);
+  line-height: 1.16;
+}
+
+.tech-cta__aside {
+  display: grid;
+  gap: 14px;
+}
+
+.trust-strip {
+  display: grid;
+  gap: 8px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.trust-strip span {
+  display: flex;
+  min-height: 34px;
+  align-items: center;
+  border: 1px solid var(--border-hairline);
+  background: var(--canvas-soft);
+  padding: 7px 10px;
   color: var(--ink-secondary);
-  font-size: 16px;
-  line-height: 1.6;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.trust-strip span:last-child {
+  grid-column: 1 / -1;
 }
 
 .tech-cta__actions {
   display: flex;
-  justify-content: center;
   gap: 12px;
 }
 
@@ -176,68 +119,56 @@ import { dataBoundaries, qualityRails } from '@/content/techPage'
 }
 
 @media (max-width: 900px) {
-  .ops-section__grid {
+  .tech-cta__inner {
     grid-template-columns: 1fr;
   }
 }
 
-@media (max-width: 640px) {
-  .quality-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
 @media (max-width: 560px) {
-  .ops-section,
   .tech-cta {
     padding-block: 26px;
   }
 
-  .ops-section__grid {
-    gap: 10px;
-  }
-
-  .ops-panel,
-  .boundary-panel {
-    padding: 10px;
-  }
-
-  .ops-panel h2,
-  .boundary-panel h2 {
-    font-size: 20px;
-  }
-
-  .quality-grid {
-    gap: 8px;
-    margin-top: 12px;
-  }
-
-  .quality-card,
-  .boundary-card {
-    padding: 10px;
-  }
-
-  .quality-card p,
-  .boundary-card p {
-    display: -webkit-box;
-    overflow: hidden;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 1;
-    font-size: 12px;
+  .tech-cta__inner {
+    gap: 16px;
   }
 
   .tech-cta h2 {
-    font-size: 22px;
+    margin-top: 8px;
+    font-size: 24px;
   }
 
-  .tech-cta p {
-    margin-bottom: 16px;
-    font-size: 13px;
-    line-height: 1.45;
+  .tech-cta__aside {
+    gap: 12px;
+  }
+
+  .trust-strip {
+    gap: 6px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .trust-strip span {
+    padding: 6px 7px;
+    font-size: 11px;
+  }
+
+  .trust-strip span:last-child {
+    grid-column: 1 / -1;
   }
 
   .tech-cta__actions {
     display: grid;
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 360px) {
+  .trust-strip {
+    grid-template-columns: 1fr;
+  }
+
+  .trust-strip span:last-child {
+    grid-column: auto;
   }
 }
 </style>
