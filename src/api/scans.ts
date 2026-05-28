@@ -22,12 +22,17 @@ export function createScanJob(input: CreateScanJobRequest): Promise<SiteScanJobE
   })
 }
 
-export function getScanJob(id: string): Promise<PersistedScanJobResponse> {
-  return apiRequest<PersistedScanJobResponse>(`/scan/jobs/${encodeURIComponent(id)}`)
+export function getScanJob(id: string, signal?: AbortSignal): Promise<PersistedScanJobResponse> {
+  return apiRequest<PersistedScanJobResponse>(`/scan/jobs/${encodeURIComponent(id)}`, { signal })
 }
 
-export function getScanJobArtifact(id: string): Promise<ScanArtifactResponse> {
-  return apiRequest<ScanArtifactResponse>(`/scan/jobs/${encodeURIComponent(id)}/artifact`)
+export function getScanJobArtifact(
+  id: string,
+  signal?: AbortSignal,
+): Promise<ScanArtifactResponse> {
+  return apiRequest<ScanArtifactResponse>(`/scan/jobs/${encodeURIComponent(id)}/artifact`, {
+    signal,
+  })
 }
 
 export function createScanJobReport(id: string): Promise<AiReportResponse> {

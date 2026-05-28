@@ -1,7 +1,7 @@
-import { computed, readonly, shallowRef, watch, type MaybeRefOrGetter, toValue } from 'vue'
+import { computed, watch, type MaybeRefOrGetter, toValue } from 'vue'
 
 import { ApiRequestError } from '@/api/client'
-import { getScanJob, getScanJobArtifact } from '@/api/scans'
+import { useScanJobArtifactQuery, useScanJobQuery } from '@/queries/scans'
 
 export type LiveLayerSummary = {
   id: string
@@ -38,42 +38,57 @@ export type LiveScanReport = {
 }
 
 export function useScanJobReport(jobId: MaybeRefOrGetter<string>) {
-  const jobResponse = shallowRef<unknown>(null)
-  const artifactResponse = shallowRef<unknown>(null)
-  const isLoading = shallowRef(false)
-  const errorMessage = shallowRef('')
+  const jobQuery = useScanJobQuery()
+  const artifactQuery = useScanJobArtifactQuery()
+  const currentJobId = computed(() => toValue(jobId).trim())
 
   const report = computed(() =>
-    createLiveScanReport(toValue(jobId), jobResponse.value, artifactResponse.value),
+    createLiveScanReport(currentJobId.value, jobQuery.data.value, artifactQuery.data.value),
   )
 
+  const isLoading = computed(() =>
+    Boolean(
+      currentJobId.value &&
+      (jobQuery.isPending.value ||
+        artifactQuery.isPending.value ||
+        jobQuery.isLoading.value ||
+        artifactQuery.isLoading.value),
+    ),
+  )
+
+  const errorMessage = computed(() => {
+    if (!currentJobId.value) {
+      return 'Report id is missing.'
+    }
+
+    const error = jobQuery.error.value ?? artifactQuery.error.value
+    return error ? toReportLoadMessage(error) : ''
+  })
+
   async function load(): Promise<void> {
-    const id = toValue(jobId).trim()
-    errorMessage.value = ''
+    const id = currentJobId.value
 
     if (!id) {
-      errorMessage.value = 'Report id is missing.'
       return
     }
 
-    isLoading.value = true
-
-    try {
-      const [job, artifact] = await Promise.all([getScanJob(id), getScanJobArtifact(id)])
-      jobResponse.value = job
-      artifactResponse.value = artifact
-    } catch (error) {
-      errorMessage.value = toReportLoadMessage(error)
-    } finally {
-      isLoading.value = false
-    }
+    jobQuery.setJobId(id)
+    artifactQuery.setJobId(id)
+    await Promise.all([jobQuery.refetch(), artifactQuery.refetch()])
   }
 
-  watch(() => toValue(jobId), load, { immediate: true })
+  watch(
+    currentJobId,
+    (id) => {
+      jobQuery.setJobId(id)
+      artifactQuery.setJobId(id)
+    },
+    { immediate: true },
+  )
 
   return {
-    errorMessage: readonly(errorMessage),
-    isLoading: readonly(isLoading),
+    errorMessage,
+    isLoading,
     load,
     report,
   }

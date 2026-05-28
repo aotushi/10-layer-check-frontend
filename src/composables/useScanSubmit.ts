@@ -2,29 +2,28 @@ import { computed, readonly, shallowRef } from 'vue'
 import { useRouter } from 'vue-router'
 
 import { ApiRequestError } from '@/api/client'
-import { createScanJob } from '@/api/scans'
+import { useCreateScanJobMutation } from '@/queries/scans'
 
 export function useScanSubmit() {
   const router = useRouter()
-  const isSubmitting = shallowRef(false)
+  const createJob = useCreateScanJobMutation()
   const errorMessage = shallowRef('')
   const createdJobId = shallowRef('')
 
-  const canSubmit = computed(() => !isSubmitting.value)
+  const canSubmit = computed(() => !createJob.isLoading.value)
 
   async function submitScan(target: string): Promise<void> {
     const trimmedTarget = target.trim()
     errorMessage.value = ''
+    createJob.reset()
 
     if (!trimmedTarget) {
       errorMessage.value = 'Enter a public domain before starting the scan.'
       return
     }
 
-    isSubmitting.value = true
-
     try {
-      const envelope = await createScanJob({
+      const envelope = await createJob.mutateAsync({
         target: trimmedTarget,
       })
       const jobId = envelope.job?.id
@@ -37,8 +36,6 @@ export function useScanSubmit() {
       await router.push({ name: 'report-detail', params: { id: jobId } })
     } catch (error) {
       errorMessage.value = toScanSubmitMessage(error)
-    } finally {
-      isSubmitting.value = false
     }
   }
 
@@ -46,7 +43,7 @@ export function useScanSubmit() {
     canSubmit,
     createdJobId: readonly(createdJobId),
     errorMessage: readonly(errorMessage),
-    isSubmitting: readonly(isSubmitting),
+    isSubmitting: createJob.isLoading,
     submitScan,
   }
 }
