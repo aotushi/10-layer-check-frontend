@@ -1,5 +1,5 @@
 {
-  "name": "site-10-layer-check-pages",
+  "name": "10-layer-check-frontend",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -16,7 +16,7 @@
     "test:visual": "playwright test",
     "quality:push": "npm run typecheck && npm run build && npm run test:stories",
     "prepare": "husky",
-    "deploy:pages": "wrangler pages deploy dist --project-name site-10-layer-check"
+    "deploy:pages": "wrangler pages deploy dist --project-name 10-layer-check-frontend"
   },
   "dependencies": {
     "@pinia/colada": "^1.3.1",

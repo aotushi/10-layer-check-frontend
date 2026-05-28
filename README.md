@@ -44,6 +44,7 @@ Playwright visual tests intentionally stay out of `pre-commit`; run them locally
 
 Production domain split:
 
+- Cloudflare Pages project: `10-layer-check-frontend`.
 - Cloudflare Pages frontend: `https://probe.9shi.cc`.
 - Worker API route: `https://probe.9shi.cc/api/*`.
 
