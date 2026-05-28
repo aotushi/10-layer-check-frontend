@@ -14,6 +14,8 @@
     "story": "histoire dev",
     "test:stories": "histoire build",
     "test:visual": "playwright test",
+    "quality:push": "npm run typecheck && npm run build && npm run test:stories",
+    "prepare": "husky",
     "deploy:pages": "wrangler pages deploy dist --project-name site-10-layer-check"
   },
   "dependencies": {
@@ -34,6 +36,8 @@
     "eslint-plugin-vue": "^10.9.1",
     "globals": "^17.6.0",
     "histoire": "^1.0.0-beta.1",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.4.0",
     "msw": "^2.14.6",
     "prettier": "^3.8.3",
     "tailwindcss": "^4.3.0",
@@ -46,6 +50,15 @@
   "msw": {
     "workerDirectory": [
       "public"
+    ]
+  },
+  "lint-staged": {
+    "*.{js,ts,vue}": [
+      "prettier --write",
+      "eslint --fix --no-warn-ignored"
+    ],
+    "*.{json,css,md,yml,yaml}": [
+      "prettier --write"
     ]
   }
 }
