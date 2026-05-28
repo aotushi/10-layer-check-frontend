@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { shallowRef } from 'vue'
 
+import { useScanSubmit } from '@/composables/useScanSubmit'
 import { heroReportItems } from '@/content/homePage'
 
 const targetDomain = shallowRef('overreacted.io')
+const { canSubmit, errorMessage, isSubmitting, submitScan } = useScanSubmit()
 </script>
 
 <template>
@@ -17,16 +19,22 @@ const targetDomain = shallowRef('overreacted.io')
           Execute an engineering-grade public reconnaissance scan. Discover exposed surface
           architecture, assess TLS configuration, and detect anomalous headers.
         </p>
-        <form class="scan-form" @submit.prevent>
+        <form class="scan-form" @submit.prevent="submitScan(targetDomain)">
           <input
             v-model="targetDomain"
             aria-label="Target domain"
             class="scan-form__input"
             type="text"
             autocomplete="url"
+            :disabled="isSubmitting"
           />
-          <button class="scan-form__button" type="submit">Run scan</button>
+          <button class="scan-form__button" type="submit" :disabled="!canSubmit">
+            {{ isSubmitting ? 'Starting' : 'Run scan' }}
+          </button>
         </form>
+        <p v-if="errorMessage" class="scan-form__message" role="status">
+          {{ errorMessage }}
+        </p>
       </div>
 
       <aside class="report-preview" aria-label="Diagnostic report preview">
@@ -127,6 +135,23 @@ const targetDomain = shallowRef('overreacted.io')
 
 .scan-form__button:hover {
   background: var(--primary-hover);
+}
+
+.scan-form__button:disabled,
+.scan-form__input:disabled {
+  cursor: wait;
+  opacity: 0.72;
+}
+
+.scan-form__message {
+  max-width: 500px;
+  margin: 12px 0 0;
+  border-left: 3px solid var(--danger);
+  background: color-mix(in srgb, var(--danger) 6%, var(--canvas));
+  color: var(--danger);
+  padding: 9px 12px;
+  font-size: 13px;
+  line-height: 1.4;
 }
 
 .report-preview {
