@@ -1,10 +1,10 @@
 import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
 
+import CaseDetailView from '@/views/CaseDetailView.vue'
 import HistoryView from '@/views/HistoryView.vue'
 import HomeView from '@/views/HomeView.vue'
 import LayerModelView from '@/views/LayerModelView.vue'
 import LoginView from '@/views/LoginView.vue'
-import PlaceholderView from '@/views/PlaceholderView.vue'
 import RegisterView from '@/views/RegisterView.vue'
 import ReportDetailView from '@/views/ReportDetailView.vue'
 import TechView from '@/views/TechView.vue'
@@ -61,11 +61,7 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/cases/:slug',
     name: 'case-detail',
-    component: PlaceholderView,
-    props: {
-      title: 'Case Detail',
-      description: 'Trust/proof case page for a public example report.',
-    },
+    component: CaseDetailView,
   },
 ]
 

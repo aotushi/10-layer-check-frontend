@@ -32,6 +32,7 @@ export default defineConfig({
       { id: 'report', title: 'Report Detail' },
       { id: 'history', title: 'History Workspace' },
       { id: 'auth', title: 'Auth Pages' },
+      { id: 'cases', title: 'Case Studies' },
     ],
   },
   responsivePresets: [

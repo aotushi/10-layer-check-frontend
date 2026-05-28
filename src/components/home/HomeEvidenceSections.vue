@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { RouterLink } from 'vue-router'
+
 import { anomalies, evidenceLines, trustBadges } from '@/content/homePage'
 </script>
 
@@ -16,6 +18,9 @@ import { anomalies, evidenceLines, trustBadges } from '@/content/homePage'
         :class="`evidence-block__line evidence-block__line--${line.tone}`"
       >{{ line.text }}
 </span></code></pre>
+      <RouterLink class="case-proof-link" to="/cases/overreacted-public-report">
+        Read the full sample case
+      </RouterLink>
     </div>
   </section>
 
@@ -110,6 +115,16 @@ import { anomalies, evidenceLines, trustBadges } from '@/content/homePage'
 
 .evidence-block__line--neutral:first-child {
   color: var(--ink-muted);
+}
+
+.case-proof-link {
+  display: inline-flex;
+  margin-top: 18px;
+  color: var(--primary);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
 .anomaly-grid {
