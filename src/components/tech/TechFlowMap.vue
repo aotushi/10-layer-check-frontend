@@ -1,219 +1,274 @@
 <script setup lang="ts">
 import { workflowDiagramNodes } from '@/content/techPage'
 
-const mainPath = workflowDiagramNodes.filter((node) => node.kind !== 'operations')
 const engineNode = workflowDiagramNodes.find((node) => node.kind === 'engine')
-const operationsNode = workflowDiagramNodes.find((node) => node.kind === 'operations')
 
-const mapNodes = [
+const probeGroups = engineNode?.probeGroups ?? []
+
+const operationsRail = [
   {
-    id: 'domain-input',
-    className: 'architecture-node--input',
-    lane: 'Client',
-    title: 'Domain input',
-    body: 'Public URL enters the app shell.',
-    tags: ['validate', 'route'],
+    title: 'GitHub Actions',
+    detail: 'type lint test build',
+    label: 'quality gates',
   },
   {
-    id: 'scan-api',
-    className: 'architecture-node--api',
-    lane: 'Edge API',
-    title: 'Worker API',
-    body: 'Creates scan job and selects the probe plan.',
-    tags: ['job id', 'limits'],
+    title: 'Histoire',
+    detail: 'base component review',
+    label: 'component review',
   },
   {
-    id: 'evidence-store',
-    className: 'architecture-node--data',
-    lane: 'Data',
-    title: 'D1 / KV',
-    body: 'Persists facts before any report prose exists.',
-    tags: ['findings', 'cache'],
+    title: 'Playwright',
+    detail: 'visual regression',
+    label: 'responsive coverage',
   },
   {
-    id: 'ai-report',
-    className: 'architecture-node--ai',
-    lane: 'AI',
-    title: 'Workers AI',
-    body: 'Explains evidence and missing-data boundaries.',
-    tags: ['summary', 'guardrails'],
+    title: 'Cloudflare Pages',
+    detail: 'frontend deploy',
+    label: 'deploy checks',
   },
   {
-    id: 'review-artifact',
-    className: 'architecture-node--report',
-    lane: 'Report',
-    title: 'Report UI',
-    body: 'Turns the scan into a reusable artifact.',
-    tags: ['history', 'SEO-safe'],
+    title: 'D1 KV migrations',
+    detail: 'data plane control',
+    label: 'data control',
   },
 ] as const
 
-const supportTargets = ['Vue shell', 'Worker API', 'Probe engine', 'Report UI'] as const
+const operationPositions = [
+  { x: 32, y: 320 },
+  { x: 32, y: 408 },
+  { x: 32, y: 496 },
+  { x: 32, y: 584 },
+  { x: 32, y: 672 },
+] as const
+
+const probePositions = [
+  { x: 874, y: 96 },
+  { x: 874, y: 190 },
+  { x: 874, y: 284 },
+  { x: 874, y: 378 },
+] as const
 </script>
 
 <template>
-  <section class="workflow-section">
+  <section class="workflow-section" data-tech-flow-map>
     <div class="page-inner">
       <div class="workflow-section__header">
         <p>Business workflow</p>
-        <h2>Public scan request to evidence-backed report artifact</h2>
+        <h2>Public domain to evidence-backed report artifact</h2>
+        <span>Thin-line pipeline architecture diagram</span>
       </div>
 
-      <div class="architecture-map" aria-label="Architecture workflow diagram">
-        <div class="architecture-map__bands" aria-hidden="true">
-          <span>Frontend</span>
-          <span>Edge orchestration</span>
-          <span>10-layer core</span>
-          <span>Data + AI</span>
-          <span>Report surface</span>
-        </div>
-
+      <div class="pipeline-shell">
         <svg
-          class="architecture-map__wires"
-          viewBox="0 0 1120 620"
-          aria-hidden="true"
-          preserveAspectRatio="none"
+          class="pipeline-map"
+          viewBox="0 40 1680 700"
+          role="img"
+          aria-labelledby="pipeline-title pipeline-desc"
         >
+          <title id="pipeline-title">10-Layer Check workflow pipeline</title>
+          <desc id="pipeline-desc">
+            Public domain input moves through the Vue app shell, Cloudflare Worker API, 10-layer
+            probe engine, evidence records, D1 and KV storage, Workers AI, and the report UI.
+            Operations support uses dashed lines and stays outside the main request path.
+          </desc>
+
           <defs>
             <marker
-              id="arrow-primary"
+              id="workflow-arrow-blue"
               markerHeight="10"
               markerWidth="10"
               orient="auto"
-              refX="8"
+              refX="9"
               refY="5"
             >
               <path d="M0,0 L10,5 L0,10 Z" fill="var(--primary)" />
             </marker>
             <marker
-              id="arrow-support"
+              id="workflow-arrow-gray"
               markerHeight="10"
               markerWidth="10"
               orient="auto"
-              refX="8"
+              refX="9"
               refY="5"
             >
               <path d="M0,0 L10,5 L0,10 Z" fill="var(--ink-muted)" />
             </marker>
+            <marker
+              id="workflow-arrow-green"
+              markerHeight="10"
+              markerWidth="10"
+              orient="auto"
+              refX="9"
+              refY="5"
+            >
+              <path d="M0,0 L10,5 L0,10 Z" fill="var(--success)" />
+            </marker>
           </defs>
 
-          <path
-            class="wire wire--primary"
-            d="M142 258 H308 C330 258 330 238 352 238 H474"
-            marker-end="url(#arrow-primary)"
+          <rect class="pipeline-map__surface" width="1680" height="760" />
+
+          <rect class="pipeline-node" x="44" y="207" width="106" height="46" />
+          <text class="pipeline-text" x="97" y="225" text-anchor="middle">Public user</text>
+          <text class="pipeline-text" x="97" y="240" text-anchor="middle">Domain</text>
+
+          <rect class="pipeline-node" x="290" y="214" width="154" height="48" />
+          <text class="pipeline-text" x="367" y="232" text-anchor="middle">Vue app shell</text>
+          <text class="pipeline-muted" x="367" y="247" text-anchor="middle">
+            components + requests
+          </text>
+
+          <rect class="pipeline-node" x="478" y="244" width="150" height="58" />
+          <text class="pipeline-text" x="553" y="263" text-anchor="middle">
+            Cloudflare Worker API
+          </text>
+          <text class="pipeline-muted" x="553" y="278" text-anchor="middle">create scan job</text>
+          <text class="pipeline-muted" x="553" y="292" text-anchor="middle">apply limits</text>
+
+          <rect class="pipeline-node" x="660" y="254" width="142" height="34" />
+          <text class="pipeline-text" x="731" y="275" text-anchor="middle">
+            10-layer probe engine
+          </text>
+
+          <rect class="pipeline-group" x="852" y="74" width="166" height="328" />
+          <text class="pipeline-group-title" x="935" y="58" text-anchor="middle">
+            10-layer probe groups
+          </text>
+
+          <g
+            v-for="(group, index) in probeGroups"
+            :key="group.title"
+            :transform="`translate(${probePositions[index]?.x ?? 874} ${probePositions[index]?.y ?? 96})`"
+          >
+            <rect class="pipeline-node" width="122" :height="index === 3 ? 66 : 58" />
+            <text class="pipeline-text" x="61" y="19" text-anchor="middle">{{ group.title }}</text>
+            <text class="pipeline-muted" x="61" y="34" text-anchor="middle">
+              {{ group.layers.slice(0, 2).join(' / ') }}
+            </text>
+            <text class="pipeline-muted" x="61" y="48" text-anchor="middle">
+              {{ group.layers.slice(2).join(' / ') }}
+            </text>
+          </g>
+
+          <rect
+            class="pipeline-node pipeline-node--green"
+            x="1048"
+            y="265"
+            width="132"
+            height="48"
           />
-          <path
-            class="wire wire--primary"
-            d="M760 236 H850 C875 236 875 186 900 186"
-            marker-end="url(#arrow-primary)"
+          <text class="pipeline-text" x="1114" y="283" text-anchor="middle">Evidence records</text>
+          <text class="pipeline-muted" x="1114" y="298" text-anchor="middle">
+            normalized findings
+          </text>
+
+          <rect
+            class="pipeline-node pipeline-node--green"
+            x="1214"
+            y="342"
+            width="134"
+            height="48"
           />
-          <path class="wire wire--primary" d="M975 244 V342" marker-end="url(#arrow-primary)" />
-          <path
-            class="wire wire--primary"
-            d="M902 406 H785 C755 406 755 462 718 462"
-            marker-end="url(#arrow-primary)"
+          <text class="pipeline-text" x="1281" y="360" text-anchor="middle">D1 + KV</text>
+          <text class="pipeline-muted" x="1281" y="375" text-anchor="middle">
+            jobs findings cache
+          </text>
+
+          <rect
+            class="pipeline-node pipeline-node--orange"
+            x="1378"
+            y="331"
+            width="136"
+            height="58"
           />
+          <text class="pipeline-text" x="1446" y="350" text-anchor="middle">Workers AI</text>
+          <text class="pipeline-muted" x="1446" y="365" text-anchor="middle">
+            summarize evidence
+          </text>
+          <text class="pipeline-muted" x="1446" y="379" text-anchor="middle">mark unknowns</text>
+
+          <rect class="pipeline-node" x="1545" y="362" width="108" height="58" />
+          <text class="pipeline-text" x="1599" y="381" text-anchor="middle">Report UI</text>
+          <text class="pipeline-muted" x="1599" y="396" text-anchor="middle">history route</text>
+          <text class="pipeline-muted" x="1599" y="410" text-anchor="middle">
+            SEO-safe artifact
+          </text>
+
+          <path class="pipeline-line" d="M150 230 C206 230 228 238 290 238" />
+          <path class="pipeline-line" d="M444 238 C462 238 462 273 478 273" />
+          <path class="pipeline-line" d="M628 273 H660" />
+
+          <path class="pipeline-line" d="M802 271 C834 271 838 125 874 125" />
+          <path class="pipeline-line" d="M802 271 C836 271 838 219 874 219" />
+          <path class="pipeline-line" d="M802 271 C836 271 838 313 874 313" />
+          <path class="pipeline-line" d="M802 271 C836 271 838 411 874 411" />
 
           <path
-            class="wire wire--support"
-            d="M255 512 C255 450 218 414 218 338"
-            marker-end="url(#arrow-support)"
+            class="pipeline-line pipeline-line--green"
+            d="M996 125 C1030 125 1028 273 1048 279"
           />
           <path
-            class="wire wire--support"
-            d="M430 512 C430 450 444 398 500 360"
-            marker-end="url(#arrow-support)"
+            class="pipeline-line pipeline-line--green"
+            d="M996 219 C1030 219 1028 282 1048 284"
           />
           <path
-            class="wire wire--support"
-            d="M660 512 C690 462 716 430 732 360"
-            marker-end="url(#arrow-support)"
+            class="pipeline-line pipeline-line--green"
+            d="M996 313 C1028 313 1030 294 1048 294"
           />
           <path
-            class="wire wire--support"
-            d="M820 512 C825 480 795 462 740 462"
-            marker-end="url(#arrow-support)"
+            class="pipeline-line pipeline-line--green"
+            d="M996 411 C1030 411 1028 309 1048 300"
           />
+          <path
+            class="pipeline-line pipeline-line--green"
+            d="M1180 289 C1204 289 1202 366 1214 366"
+          />
+          <path class="pipeline-line pipeline-line--green" d="M1348 366 H1378" />
+          <path class="pipeline-line" d="M1514 360 C1534 360 1530 391 1545 391" />
+
+          <text class="pipeline-rail-title" x="76" y="300" text-anchor="middle">
+            Operations support rail
+          </text>
+
+          <g
+            v-for="(item, index) in operationsRail"
+            :key="item.title"
+            :transform="`translate(${operationPositions[index].x} ${operationPositions[index].y})`"
+          >
+            <rect class="pipeline-node pipeline-node--support" width="138" height="46" />
+            <text class="pipeline-text" x="69" y="18" text-anchor="middle">{{ item.title }}</text>
+            <text class="pipeline-muted" x="69" y="33" text-anchor="middle">{{ item.detail }}</text>
+          </g>
+
+          <path
+            class="pipeline-line pipeline-line--support"
+            d="M170 343 C226 326 236 263 290 248"
+          />
+          <text class="pipeline-line-label" x="256" y="314">quality gates</text>
+
+          <path
+            class="pipeline-line pipeline-line--support"
+            d="M170 431 C214 400 242 274 290 250"
+          />
+          <text class="pipeline-line-label" x="214" y="380">component review</text>
+
+          <path
+            class="pipeline-line pipeline-line--support"
+            d="M170 519 C430 520 1266 516 1545 414"
+          />
+          <text class="pipeline-line-label" x="820" y="506">responsive coverage</text>
+
+          <path
+            class="pipeline-line pipeline-line--support"
+            d="M170 607 C306 566 398 466 478 300"
+          />
+          <text class="pipeline-line-label" x="294" y="556">deploy checks</text>
+
+          <path
+            class="pipeline-line pipeline-line--support"
+            d="M170 695 C474 695 1110 694 1248 390"
+          />
+          <text class="pipeline-line-label" x="772" y="682">data control</text>
         </svg>
-
-        <article
-          v-for="node in mapNodes"
-          :key="node.id"
-          class="architecture-node"
-          :class="node.className"
-        >
-          <span>{{ node.lane }}</span>
-          <h3>{{ node.title }}</h3>
-          <p>{{ node.body }}</p>
-          <div>
-            <small v-for="tag in node.tags" :key="tag">{{ tag }}</small>
-          </div>
-        </article>
-
-        <article class="architecture-engine">
-          <span>10-layer core</span>
-          <h3>{{ engineNode?.stage }}</h3>
-          <p>{{ engineNode?.summary }}</p>
-
-          <div class="architecture-engine__groups">
-            <section v-for="group in engineNode?.probeGroups" :key="group.title">
-              <h4>{{ group.title }}</h4>
-              <div>
-                <small v-for="layer in group.layers" :key="layer">{{ layer }}</small>
-              </div>
-            </section>
-          </div>
-        </article>
-
-        <aside class="operations-plane">
-          <div>
-            <span>Operations plane</span>
-            <h3>{{ operationsNode?.stage }}</h3>
-            <p>{{ operationsNode?.summary }}</p>
-          </div>
-          <div class="operations-plane__targets">
-            <small v-for="target in supportTargets" :key="target">{{ target }}</small>
-          </div>
-          <div class="operations-plane__tools">
-            <strong v-for="item in operationsNode?.operations" :key="item">{{ item }}</strong>
-          </div>
-        </aside>
-
-        <div class="architecture-map__legend" aria-hidden="true">
-          <span>solid: request path</span>
-          <span>dashed: quality support</span>
-        </div>
-      </div>
-
-      <div class="architecture-mobile" aria-label="Mobile architecture workflow">
-        <section class="mobile-panel">
-          <p>Main path</p>
-          <ol>
-            <li v-for="node in mainPath" :key="node.id">
-              <span>{{ node.layer }}</span>
-              <strong>{{ node.stage }}</strong>
-            </li>
-          </ol>
-        </section>
-
-        <section class="mobile-panel mobile-panel--core">
-          <p>10-layer probe groups</p>
-          <div>
-            <article v-for="group in engineNode?.probeGroups" :key="group.title">
-              <strong>{{ group.title }}</strong>
-              <span>{{ group.layers.join(' / ') }}</span>
-            </article>
-          </div>
-        </section>
-
-        <section class="mobile-panel mobile-panel--ops">
-          <p>Operations support</p>
-          <div>
-            <article v-for="item in operationsNode?.operations" :key="item">
-              <strong>{{ item }}</strong>
-            </article>
-          </div>
-        </section>
       </div>
     </div>
   </section>
@@ -222,406 +277,137 @@ const supportTargets = ['Vue shell', 'Worker API', 'Probe engine', 'Report UI'] 
 <style scoped>
 .workflow-section {
   border-bottom: 1px solid var(--border-hairline);
-  background: var(--canvas-muted);
-  padding: var(--section-y) var(--page-gutter);
+  background: var(--canvas);
+  padding: clamp(42px, 6vw, 72px) var(--page-gutter);
 }
 
 .workflow-section__header {
-  max-width: 780px;
-  margin: 0 auto 28px;
+  display: grid;
+  gap: 8px;
+  max-width: 760px;
+  margin: 0 auto 24px;
   text-align: center;
 }
 
+.workflow-section__header p,
+.workflow-section__header h2,
+.workflow-section__header span {
+  margin: 0;
+}
+
 .workflow-section__header p {
-  margin: 0 0 8px;
   color: var(--primary);
   font-size: 12px;
   font-weight: 800;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
 }
 
 .workflow-section__header h2 {
-  margin: 0;
   color: var(--ink);
-  font-size: 24px;
-  line-height: 1.25;
+  font-size: clamp(22px, 3vw, 30px);
+  font-weight: 500;
+  line-height: 1.18;
 }
 
-.architecture-map {
-  position: relative;
-  min-height: 620px;
-  border: 1px solid var(--border-strong);
-  background:
-    linear-gradient(90deg, color-mix(in srgb, var(--soft-primary) 34%, transparent), transparent),
-    var(--canvas);
-  overflow: hidden;
+.workflow-section__header span {
+  color: var(--ink-muted);
+  font-size: 13px;
 }
 
-.architecture-map::before {
-  position: absolute;
-  inset: 64px 34px 86px;
-  border: 1px solid color-mix(in srgb, var(--border-hairline) 76%, transparent);
-  content: '';
-  pointer-events: none;
+.pipeline-shell {
+  border: 1px solid var(--border-hairline);
+  background: var(--canvas);
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
 }
 
-.architecture-map__bands {
-  position: absolute;
-  inset: 0;
-  display: grid;
-  grid-template-columns: 18% 20% 28% 21% 13%;
-  pointer-events: none;
-}
-
-.architecture-map__bands span {
-  border-right: 1px solid color-mix(in srgb, var(--border-hairline) 58%, transparent);
-  padding: 22px 16px 0;
-  color: color-mix(in srgb, var(--ink-muted) 72%, transparent);
-  font-size: 10px;
-  font-weight: 800;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-}
-
-.architecture-map__wires {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
+.pipeline-map {
+  display: block;
   width: 100%;
-  height: 100%;
-  pointer-events: none;
+  min-width: 0;
+  height: auto;
 }
 
-.wire {
-  fill: none;
-  stroke-linecap: square;
-  stroke-linejoin: round;
+.pipeline-map__surface {
+  fill: var(--canvas);
 }
 
-.wire--primary {
+.pipeline-node {
+  fill: color-mix(in srgb, var(--canvas-soft) 58%, var(--canvas));
   stroke: var(--primary);
-  stroke-width: 2.25;
+  stroke-width: 1.6;
 }
 
-.wire--support {
+.pipeline-node--green {
+  fill: color-mix(in srgb, var(--success) 7%, var(--canvas));
+  stroke: var(--success);
+}
+
+.pipeline-node--orange {
+  fill: color-mix(in srgb, var(--warning) 9%, var(--canvas));
+  stroke: var(--warning);
+}
+
+.pipeline-node--support {
+  fill: var(--canvas);
+  stroke: var(--border-strong);
+  stroke-dasharray: 4 4;
+}
+
+.pipeline-group {
+  fill: transparent;
+  stroke: color-mix(in srgb, var(--border-hairline) 72%, transparent);
+  stroke-width: 1.2;
+}
+
+.pipeline-group-title,
+.pipeline-rail-title {
+  fill: var(--ink-secondary);
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.pipeline-text {
+  fill: var(--ink);
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.pipeline-muted {
+  fill: var(--ink-muted);
+  font-size: 10px;
+  font-weight: 400;
+}
+
+.pipeline-line {
+  fill: none;
+  stroke: var(--primary);
+  stroke-width: 1.25;
+  marker-end: url(#workflow-arrow-blue);
+}
+
+.pipeline-line--green {
+  stroke: var(--success);
+  marker-end: url(#workflow-arrow-green);
+}
+
+.pipeline-line--support {
   stroke: var(--ink-muted);
-  stroke-dasharray: 7 7;
-  stroke-width: 1.35;
+  stroke-dasharray: 3 3;
+  stroke-width: 1;
+  marker-end: url(#workflow-arrow-gray);
 }
 
-.architecture-node,
-.architecture-engine,
-.operations-plane {
-  position: absolute;
-  z-index: 2;
-  border: 1px solid var(--border-strong);
-  background: var(--canvas);
-  box-shadow: 0 16px 34px color-mix(in srgb, var(--ink) 7%, transparent);
-}
-
-.architecture-node {
-  display: grid;
-  gap: 8px;
-  width: 152px;
-  min-height: 138px;
-  padding: 14px;
-}
-
-.architecture-node--input {
-  top: 210px;
-  left: 56px;
-  width: 142px;
-  min-height: 112px;
-  border-left: 4px solid var(--primary);
-}
-
-.architecture-node--api {
-  top: 194px;
-  left: 278px;
-  width: 166px;
-  border-left: 4px solid var(--info);
-}
-
-.architecture-node--data {
-  top: 128px;
-  right: 130px;
-  width: 164px;
-  border-left: 4px solid var(--success);
-}
-
-.architecture-node--ai {
-  right: 130px;
-  bottom: 138px;
-  width: 164px;
-  border-left: 4px solid var(--warning);
-}
-
-.architecture-node--report {
-  right: 32px;
-  top: 252px;
-  width: 132px;
-  min-height: 120px;
-  border-left: 4px solid var(--primary-deep);
-}
-
-.architecture-node span,
-.architecture-engine > span,
-.operations-plane span {
-  color: var(--primary);
+.pipeline-line-label {
+  fill: var(--ink-muted);
   font-size: 10px;
-  font-weight: 800;
-  letter-spacing: 0.11em;
-  text-transform: uppercase;
-}
-
-.architecture-node h3,
-.architecture-node p,
-.architecture-engine h3,
-.architecture-engine p,
-.architecture-engine h4,
-.operations-plane h3,
-.operations-plane p {
-  margin: 0;
-}
-
-.architecture-node h3 {
-  color: var(--ink);
-  font-size: 17px;
-  line-height: 1.16;
-}
-
-.architecture-node p {
-  color: var(--ink-secondary);
-  font-size: 12px;
-  line-height: 1.34;
-}
-
-.architecture-node div,
-.architecture-engine__groups div,
-.operations-plane__targets,
-.operations-plane__tools {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 5px;
-}
-
-.architecture-node small,
-.architecture-engine small,
-.operations-plane small,
-.operations-plane strong {
-  border: 1px solid var(--border-hairline);
-  background: var(--canvas-soft);
-  padding: 3px 5px;
-  color: var(--ink-secondary);
-  font-size: 10px;
-  font-weight: 800;
-  line-height: 1.1;
-}
-
-.architecture-engine {
-  top: 88px;
-  left: 462px;
-  display: grid;
-  gap: 10px;
-  width: 284px;
-  padding: 18px;
-  border-color: color-mix(in srgb, var(--primary) 42%, var(--border-strong));
-  background:
-    linear-gradient(
-      180deg,
-      color-mix(in srgb, var(--soft-primary) 76%, var(--canvas)) 0,
-      transparent 136px
-    ),
-    var(--canvas);
-}
-
-.architecture-engine h3 {
-  color: var(--ink);
-  font-size: 23px;
-  line-height: 1.1;
-}
-
-.architecture-engine p {
-  max-width: 250px;
-  color: var(--ink-secondary);
-  font-size: 12px;
-  line-height: 1.34;
-}
-
-.architecture-engine__groups {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 9px;
-}
-
-.architecture-engine__groups section {
-  border: 1px solid var(--border-hairline);
-  background: color-mix(in srgb, var(--canvas-soft) 74%, var(--canvas));
-  padding: 9px;
-}
-
-.architecture-engine h4 {
-  color: var(--ink);
-  font-size: 11px;
-  line-height: 1.2;
-}
-
-.architecture-engine__groups div {
-  margin-top: 8px;
-}
-
-.operations-plane {
-  left: 160px;
-  right: 238px;
-  bottom: 42px;
-  display: grid;
-  grid-template-columns: 1.1fr 0.9fr;
-  gap: 10px 18px;
-  border-style: dashed;
-  padding: 16px;
-  background: color-mix(in srgb, var(--canvas-muted) 62%, var(--canvas));
-  box-shadow: none;
-}
-
-.operations-plane h3 {
-  color: var(--ink);
-  font-size: 17px;
-  line-height: 1.15;
-}
-
-.operations-plane p {
-  margin-top: 6px;
-  color: var(--ink-secondary);
-  font-size: 12px;
-  line-height: 1.34;
-}
-
-.operations-plane__targets {
-  align-content: start;
-  justify-content: flex-end;
-}
-
-.operations-plane__tools {
-  grid-column: 1 / -1;
-  border-top: 1px solid var(--border-hairline);
-  padding-top: 10px;
-}
-
-.operations-plane strong {
-  color: var(--ink);
-}
-
-.architecture-map__legend {
-  position: absolute;
-  right: 22px;
-  bottom: 18px;
-  z-index: 3;
-  display: flex;
-  gap: 8px;
-}
-
-.architecture-map__legend span {
-  border: 1px solid var(--border-hairline);
-  background: var(--canvas);
-  padding: 6px 8px;
-  color: var(--ink-secondary);
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-}
-
-.architecture-mobile {
-  display: none;
+  font-weight: 400;
 }
 
 @media (max-width: 920px) {
-  .architecture-map {
-    display: none;
-  }
-
-  .architecture-mobile {
-    display: grid;
-    gap: 14px;
-  }
-
-  .mobile-panel {
-    border: 1px solid var(--border-strong);
-    background: var(--canvas);
-    padding: 14px;
-  }
-
-  .mobile-panel p {
-    margin: 0 0 12px;
-    color: var(--primary);
-    font-size: 11px;
-    font-weight: 800;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-  }
-
-  .mobile-panel ol {
-    display: grid;
-    gap: 8px;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-
-  .mobile-panel li {
-    display: grid;
-    gap: 4px;
-    border-left: 3px solid var(--primary);
-    background: var(--canvas-soft);
-    padding: 9px 10px;
-  }
-
-  .mobile-panel li span {
-    color: var(--ink-muted);
-    font-size: 10px;
-    font-weight: 800;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
-
-  .mobile-panel li strong {
-    color: var(--ink);
-    font-size: 14px;
-  }
-
-  .mobile-panel--core > div,
-  .mobile-panel--ops > div {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 8px;
-  }
-
-  .mobile-panel article {
-    border: 1px solid var(--border-hairline);
-    background: var(--canvas-soft);
-    padding: 9px;
-  }
-
-  .mobile-panel article strong {
-    display: block;
-    color: var(--ink);
-    font-size: 12px;
-    line-height: 1.2;
-  }
-
-  .mobile-panel article span {
-    display: block;
-    margin-top: 6px;
-    color: var(--ink-secondary);
-    font-size: 11px;
-    line-height: 1.35;
-  }
-}
-
-@media (max-width: 560px) {
   .workflow-section {
-    padding-block: 26px;
+    padding-block: 28px;
   }
 
   .workflow-section__header {
@@ -629,8 +415,14 @@ const supportTargets = ['Vue shell', 'Worker API', 'Probe engine', 'Report UI'] 
     text-align: left;
   }
 
-  .workflow-section__header h2 {
-    font-size: 20px;
+  .pipeline-shell {
+    margin-inline: calc(var(--page-gutter) * -1);
+    border-right: 0;
+    border-left: 0;
+  }
+
+  .pipeline-map {
+    min-width: 980px;
   }
 }
 </style>

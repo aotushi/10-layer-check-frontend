@@ -82,7 +82,7 @@ export const workflowDiagramNodes = [
     stage: 'Domain input',
     layer: 'Vue frontend',
     kind: 'entry',
-    summary: 'Public domain or IP enters the app shell.',
+    summary: 'Public domain enters the app shell.',
     actionLines: ['Validate public domain', 'Keep route context'],
     output: 'Bounded scan request',
   },
