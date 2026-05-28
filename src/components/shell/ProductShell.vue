@@ -120,8 +120,12 @@ defineProps<{
   overflow-wrap: anywhere;
 }
 
-.product-shell__session :slotted(button) {
+.product-shell__session :slotted(button),
+.product-shell__session :slotted(a) {
+  display: inline-flex;
   min-height: 34px;
+  align-items: center;
+  justify-content: center;
   border: 1px solid var(--border-dark);
   background: transparent;
   color: #c8d2e3;

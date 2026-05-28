@@ -17,7 +17,52 @@ export type ApiRequestOptions = {
 export type ApiErrorPayload = {
   error?: string
   error_code?: string
+  code?: string
   message?: string
+}
+
+export type UserRole = 'user' | 'admin'
+
+export type UserProfile = {
+  id: string
+  email: string
+  role?: UserRole
+}
+
+export type AuthCredentials = {
+  email: string
+  password: string
+}
+
+export type AuthResponse = {
+  ok: true
+  user: UserProfile
+  token: string
+}
+
+export type CurrentUserResponse = {
+  ok: true
+  user: UserProfile
+}
+
+export type ScanHistoryItem = {
+  id: string
+  user_id: string
+  job_id: string
+  target: string
+  status: string
+  created_at: string
+  completed_at: string | null
+}
+
+export type UserHistoryResponse = {
+  ok: true
+  history: ScanHistoryItem[]
+}
+
+export type UserHistoryItemResponse = {
+  ok: true
+  item: ScanHistoryItem
 }
 
 export type ScanStrategy = 'mobile' | 'desktop'

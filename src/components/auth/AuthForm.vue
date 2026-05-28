@@ -16,10 +16,12 @@ const props = withDefaults(
     switchLabel: string
     switchHref: string
     passwordHelp?: string
+    statusMessage?: string
     visualState?: AuthFormVisualState
   }>(),
   {
     passwordHelp: undefined,
+    statusMessage: undefined,
     visualState: undefined,
   },
 )
@@ -73,6 +75,10 @@ const passwordError = computed(() => {
 })
 
 const formMessage = computed(() => {
+  if (props.statusMessage && effectiveState.value !== 'loading') {
+    return props.statusMessage
+  }
+
   if (effectiveState.value === 'invalid-credentials') {
     return 'Email or password did not match a saved account.'
   }

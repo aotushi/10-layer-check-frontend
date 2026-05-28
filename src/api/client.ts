@@ -5,6 +5,7 @@ import type {
   ApiQueryParams,
   ApiRequestOptions,
 } from './types'
+import { readAuthToken } from './auth-session'
 
 export class ApiRequestError extends Error {
   readonly status: number
@@ -91,6 +92,11 @@ function createHeaders(hasBody: boolean, customHeaders?: HeadersInit): Headers {
     headers.set('x-api-key', apiKey)
   }
 
+  const token = readAuthToken()
+  if (token && !headers.has('authorization')) {
+    headers.set('authorization', `Bearer ${token}`)
+  }
+
   return headers
 }
 
@@ -129,7 +135,11 @@ async function readResponsePayload(response: Response): Promise<unknown> {
 function readErrorMessage(payload: unknown, status: number): string {
   if (isApiErrorPayload(payload)) {
     return (
-      payload.error ?? payload.message ?? payload.error_code ?? `API request failed (${status}).`
+      payload.error ??
+      payload.message ??
+      payload.error_code ??
+      payload.code ??
+      `API request failed (${status}).`
     )
   }
 
