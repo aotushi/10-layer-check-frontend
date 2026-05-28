@@ -96,6 +96,19 @@ test('public header width remains stable when navigating from long public page t
   expect(loginMetrics.headerWidth).toBe(techMetrics.headerWidth)
 })
 
+test('public header shows account entry when a session exists', async ({ page }) => {
+  await seedAuthSession(page)
+
+  await page.goto('/')
+
+  const primaryNav = page.getByRole('navigation', { name: 'Primary navigation' })
+  await expect(primaryNav.getByRole('link', { name: 'Login' })).toHaveCount(0)
+  await expect(
+    primaryNav.getByRole('link', { name: 'Open account workspace for demo@10-layer-check.test' }),
+  ).toBeVisible()
+  await expect(primaryNav.getByText('demo', { exact: true })).toBeVisible()
+})
+
 test('auth form exposes validation feedback without layout overflow', async ({ page }) => {
   await page.goto('/register')
 
@@ -145,6 +158,21 @@ async function mockLogin(page: Page): Promise<void> {
         },
       }),
     })
+  })
+}
+
+async function seedAuthSession(page: Page): Promise<void> {
+  await page.addInitScript(() => {
+    window.localStorage.setItem(
+      'site-10-layer-check.auth.v1',
+      JSON.stringify({
+        token: 'visual-test-token',
+        user: {
+          id: 'visual-test-user',
+          email: 'demo@10-layer-check.test',
+        },
+      }),
+    )
   })
 }
 
