@@ -1,11 +1,14 @@
 import { computed, readonly, shallowRef } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
 import { ApiRequestError } from '@/api/client'
 import { useCreateScanJobMutation } from '@/queries/scans'
+import { useAuthStore } from '@/stores/auth'
 
 export function useScanSubmit() {
+  const route = useRoute()
   const router = useRouter()
+  const auth = useAuthStore()
   const createJob = useCreateScanJobMutation()
   const errorMessage = shallowRef('')
   const createdJobId = shallowRef('')
@@ -19,6 +22,16 @@ export function useScanSubmit() {
 
     if (!trimmedTarget) {
       errorMessage.value = 'Enter a public domain before starting the scan.'
+      return
+    }
+
+    if (!auth.isAuthenticated) {
+      await router.push({
+        name: 'login',
+        query: {
+          redirect: route.fullPath,
+        },
+      })
       return
     }
 
@@ -58,7 +71,7 @@ function toScanSubmitMessage(error: unknown): string {
   }
 
   if (error instanceof TypeError) {
-    return 'Cannot reach the local scan API. Start the Worker and try again.'
+    return 'Cannot reach the scan API. Check the configured backend endpoint and try again.'
   }
 
   return error instanceof Error ? error.message : 'Scan request failed.'

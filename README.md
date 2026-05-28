@@ -40,6 +40,20 @@ Gate responsibilities:
 
 Playwright visual tests intentionally stay out of `pre-commit`; run them locally after UI changes and in CI before deployment.
 
+## Deployment Domains
+
+Production domain split:
+
+- Cloudflare Pages project: `10-layer-check-frontend`.
+- Cloudflare Pages frontend: `https://probe.9shi.cc`.
+- Worker API route: `https://probe.9shi.cc/api/*`.
+
+Pages production builds use the committed `.env.production` default:
+
+- `VITE_API_BASE_URL=https://probe.9shi.cc/api/`.
+
+The backend Worker keeps its internal route contract unchanged (`/health`, `/user/*`, `/scan/*`, `/probe/*`, `/provider/*`) and strips the public `/api` prefix at the Worker boundary.
+
 ## Access Boundary
 
 Current frontend access model:

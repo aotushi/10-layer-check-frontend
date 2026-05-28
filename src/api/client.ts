@@ -55,7 +55,8 @@ function createApiUrl(path: string, query?: ApiQueryParams): string {
     throw new ApiRequestError('VITE_API_BASE_URL is not configured.', 0, null)
   }
 
-  const url = new URL(path, baseUrl.endsWith('/') ? baseUrl : `${baseUrl}/`)
+  const normalizedPath = path.replace(/^\/+/, '')
+  const url = new URL(normalizedPath, baseUrl.endsWith('/') ? baseUrl : `${baseUrl}/`)
   appendQueryParams(url.searchParams, query)
 
   return url.toString()

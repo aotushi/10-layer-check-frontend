@@ -129,8 +129,8 @@ function createLiveScanReport(
       readString(artifact, 'generated_at') ?? readString(meta, 'updated_at') ?? 'Not generated',
     recordCount: readNumber(run, 'record_count') ?? records.length,
     storageState: readString(persisted, 'artifact_ref')
-      ? 'Persisted local artifact'
-      : 'Generated artifact',
+      ? 'Persisted Worker artifact'
+      : 'Generated Worker artifact',
     artifactRef:
       readString(persisted, 'artifact_ref') ?? readString(meta, 'artifact_ref') ?? 'not persisted',
     executiveSummary: readString(brief, 'executive_summary') ?? 'Live scan artifact loaded.',
@@ -222,7 +222,7 @@ function toReportLoadMessage(error: unknown): string {
   }
 
   if (error instanceof TypeError) {
-    return 'Cannot reach the local scan API. Start the Worker and reload this report.'
+    return 'Cannot reach the scan API. Check the configured backend endpoint and reload this report.'
   }
 
   return error instanceof Error ? error.message : 'Report request failed.'

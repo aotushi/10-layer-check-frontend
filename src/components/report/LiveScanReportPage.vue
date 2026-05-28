@@ -23,7 +23,7 @@ const liveReportNavItems: ProductShellNavItem[] = [
     navigation-label="Live report workspace navigation"
     :nav-items="liveReportNavItems"
     session-label="Workspace"
-    session-value="Local API session"
+    session-value="Authenticated API session"
   >
     <template #mobilebar>
       <span>{{ report.status }}</span>
@@ -46,7 +46,7 @@ const liveReportNavItems: ProductShellNavItem[] = [
       </div>
 
       <div v-if="isLoading" class="live-report__notice" role="status">
-        Loading local scan artifact.
+        Loading scan artifact from the Worker API.
       </div>
 
       <div
@@ -81,7 +81,7 @@ const liveReportNavItems: ProductShellNavItem[] = [
         <section class="live-report__panel">
           <div class="live-report__panel-heading">
             <p>Artifact identity</p>
-            <h2>Backend-generated evidence is loaded from the local Worker</h2>
+            <h2>Backend-generated evidence is loaded from the Worker API</h2>
           </div>
           <dl class="live-report__facts">
             <div>
