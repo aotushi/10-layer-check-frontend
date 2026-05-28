@@ -74,14 +74,14 @@ function toAuthMessage(error: unknown, mode: AuthMode): string {
     }
 
     if (error.status === 503) {
-      return 'Authentication service is not configured in the local Worker.'
+      return 'Authentication service is not configured on the backend.'
     }
 
     return `Authentication API returned ${error.status}: ${error.message}`
   }
 
   if (error instanceof TypeError) {
-    return 'Cannot reach the local auth API. Start the Worker and try again.'
+    return 'Cannot reach the auth API. Check the configured backend endpoint and try again.'
   }
 
   return error instanceof Error
