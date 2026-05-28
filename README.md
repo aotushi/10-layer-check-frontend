@@ -14,11 +14,31 @@ Primary UI contract:
 ## Commands
 
 - `npm run dev` starts Vite locally.
+- `npm run format` checks Prettier formatting.
+- `npm run format:write` writes Prettier formatting.
 - `npm run typecheck` runs Vue and TypeScript checks.
 - `npm run lint` runs ESLint.
 - `npm run test:stories` builds Histoire stories.
+- `npm run test:visual` runs Playwright screenshot regression tests.
 - `npm run build` creates the Pages artifact in `dist/`.
+- `npm run quality:push` runs the local pre-push gate.
 - `npm run deploy:pages` deploys `dist/` to Cloudflare Pages.
+
+## Quality Gates
+
+Local hooks:
+
+- `pre-commit` runs `lint-staged` on staged files.
+- `pre-push` runs `npm run quality:push`.
+
+Gate responsibilities:
+
+- `pre-commit`: fast staged-file formatting and lint fixes.
+- `pre-push`: `typecheck`, production `build`, and Histoire story build.
+- GitHub Actions: complete clean-environment gate: `format`, `lint`, `typecheck`, `test:stories`, `build`, and `test:visual`.
+- Cloudflare Pages deployment should happen only after the remote CI gate is green.
+
+Playwright visual tests intentionally stay out of `pre-commit`; run them locally after UI changes and in CI before deployment.
 
 ## Page Status
 
