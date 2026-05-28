@@ -3,13 +3,13 @@ import { expect, test } from '@playwright/test'
 const authRoutes = [
   {
     route: '/login',
-    heading: 'Sign in to saved scan history',
+    heading: 'Sign in to scan history',
     switchLink: 'Create an account',
     screenshot: 'login-full-page.png',
   },
   {
     route: '/register',
-    heading: 'Create an account for report history',
+    heading: 'Create a report account',
     switchLink: 'Login',
     screenshot: 'register-full-page.png',
   },

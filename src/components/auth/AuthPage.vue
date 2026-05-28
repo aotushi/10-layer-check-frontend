@@ -27,15 +27,11 @@ function handleSubmit(_payload: AuthFieldPayload) {
       <RouterLink class="auth-page__home" to="/">Back to Home</RouterLink>
     </header>
 
-    <section class="auth-page__body" :aria-labelledby="`${page.mode}-title`">
-      <div class="auth-page__intro">
-        <p>{{ page.eyebrow }}</p>
-        <h2 :id="`${page.mode}-title`">{{ page.mode === 'login' ? 'Login' : 'Register' }}</h2>
-      </div>
-
+    <section class="auth-page__body" :aria-label="`${page.mode} account`">
       <div class="auth-page__grid">
         <AuthForm
           :mode="page.mode"
+          :eyebrow="page.eyebrow"
           :title="page.title"
           :lead="page.lead"
           :submit-label="page.submitLabel"
@@ -60,10 +56,9 @@ function handleSubmit(_payload: AuthFieldPayload) {
 .auth-page {
   min-height: 100vh;
   background:
-    linear-gradient(90deg, color-mix(in srgb, var(--canvas-muted) 72%, white), transparent 1px) 0
-      0 / 32px 32px,
-    linear-gradient(0deg, color-mix(in srgb, var(--canvas-muted) 72%, white), transparent 1px) 0 0 /
-      32px 32px,
+    linear-gradient(180deg, var(--canvas) 0, var(--canvas) 58px, transparent 58px),
+    linear-gradient(90deg, color-mix(in srgb, var(--canvas-muted) 70%, white), transparent 1px) 0
+      0 / 36px 36px,
     var(--canvas-muted);
 }
 
@@ -94,47 +89,27 @@ function handleSubmit(_payload: AuthFieldPayload) {
 }
 
 .auth-page__body {
-  width: min(100%, 1080px);
+  display: grid;
+  width: min(100%, 980px);
+  min-height: calc(100vh - 58px);
+  align-items: center;
   margin: 0 auto;
-  padding: 56px var(--page-gutter) 70px;
-}
-
-.auth-page__intro {
-  display: flex;
-  align-items: end;
-  justify-content: space-between;
-  gap: 20px;
-  margin-bottom: 16px;
-}
-
-.auth-page__intro p {
-  margin: 0;
-  color: var(--primary);
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-}
-
-.auth-page__intro h2 {
-  margin: 0;
-  color: var(--ink-muted);
-  font-size: 13px;
-  font-weight: 800;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+  padding: 42px var(--page-gutter) 48px;
 }
 
 .auth-page__grid {
   display: grid;
-  align-items: start;
-  gap: 18px;
-  grid-template-columns: minmax(0, 1.1fr) minmax(320px, 0.9fr);
+  align-items: stretch;
+  overflow: hidden;
+  border: 1px solid var(--border-hairline);
+  background: var(--canvas);
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 0.72fr);
+  box-shadow: 0 18px 40px color-mix(in srgb, var(--ink) 7%, transparent);
 }
 
 @media (max-width: 860px) {
   .auth-page__body {
-    padding-top: 32px;
+    padding-top: 28px;
   }
 
   .auth-page__grid {
@@ -152,11 +127,9 @@ function handleSubmit(_payload: AuthFieldPayload) {
   }
 
   .auth-page__body {
-    padding: 20px var(--page-gutter) 32px;
-  }
-
-  .auth-page__intro {
-    margin-bottom: 10px;
+    min-height: auto;
+    align-items: start;
+    padding: 14px var(--page-gutter) 24px;
   }
 }
 </style>

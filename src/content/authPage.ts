@@ -36,8 +36,8 @@ export const authPageCopies = {
   login: {
     mode: 'login',
     eyebrow: 'Account access',
-    title: 'Sign in to saved scan history',
-    lead: 'Use your account to reopen previous diagnostic reports and continue technical review.',
+    title: 'Sign in to scan history',
+    lead: 'Reopen previous diagnostic reports and continue technical review.',
     submitLabel: 'Login',
     switchPrompt: 'New to 10-Layer Check?',
     switchLabel: 'Create an account',
@@ -68,8 +68,8 @@ export const authPageCopies = {
   register: {
     mode: 'register',
     eyebrow: 'Account creation',
-    title: 'Create an account for report history',
-    lead: 'Save public diagnostic runs so the evidence trail remains available after a scan.',
+    title: 'Create a report account',
+    lead: 'Save public diagnostic runs so the evidence trail stays available after a scan.',
     submitLabel: 'Create account',
     switchPrompt: 'Already have an account?',
     switchLabel: 'Login',

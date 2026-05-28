@@ -8,6 +8,7 @@ import type { AuthFieldPayload, AuthFormVisualState, AuthMode } from '@/content/
 const props = withDefaults(
   defineProps<{
     mode: AuthMode
+    eyebrow: string
     title: string
     lead: string
     submitLabel: string
@@ -109,7 +110,7 @@ function handleSubmit() {
 <template>
   <form class="auth-form" novalidate @submit.prevent="handleSubmit">
     <div class="auth-form__heading">
-      <p>{{ mode === 'login' ? 'Login' : 'Register' }}</p>
+      <p>{{ eyebrow }}</p>
       <h1>{{ title }}</h1>
       <span>{{ lead }}</span>
     </div>
@@ -168,13 +169,12 @@ function handleSubmit() {
 
 <style scoped>
 .auth-form {
-  border: 1px solid var(--border-hairline);
   background: var(--canvas);
-  padding: 30px;
+  padding: 34px;
 }
 
 .auth-form__heading p {
-  margin: 0 0 10px;
+  margin: 0 0 8px;
   color: var(--primary);
   font-size: 11px;
   font-weight: 800;
@@ -183,26 +183,26 @@ function handleSubmit() {
 }
 
 .auth-form__heading h1 {
-  max-width: 460px;
+  max-width: 430px;
   margin: 0;
   color: var(--ink);
-  font-size: clamp(31px, 4vw, 44px);
-  line-height: 1.04;
+  font-size: clamp(29px, 3.3vw, 38px);
+  line-height: 1.08;
 }
 
 .auth-form__heading span {
   display: block;
-  max-width: 520px;
-  margin-top: 14px;
+  max-width: 480px;
+  margin-top: 12px;
   color: var(--ink-secondary);
   font-size: 15px;
-  line-height: 1.55;
+  line-height: 1.5;
 }
 
 .auth-form__fields {
   display: grid;
-  gap: 16px;
-  margin-top: 28px;
+  gap: 14px;
+  margin-top: 24px;
 }
 
 .auth-field {
@@ -275,11 +275,11 @@ function handleSubmit() {
 
 .auth-form__submit {
   width: 100%;
-  margin-top: 18px;
+  margin-top: 16px;
 }
 
 .auth-form__switch {
-  margin: 16px 0 0;
+  margin: 14px 0 0;
   color: var(--ink-secondary);
   font-size: 13px;
   line-height: 1.45;
@@ -301,7 +301,16 @@ function handleSubmit() {
   }
 
   .auth-form__heading h1 {
-    font-size: 32px;
+    font-size: 30px;
+  }
+
+  .auth-form__heading span {
+    font-size: 14px;
+    line-height: 1.45;
+  }
+
+  .auth-form__fields {
+    margin-top: 22px;
   }
 }
 </style>
