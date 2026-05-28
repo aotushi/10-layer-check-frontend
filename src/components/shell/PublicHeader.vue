@@ -1,12 +1,21 @@
 <script setup lang="ts">
+import { computed } from 'vue'
 import { RouterLink } from 'vue-router'
+
+import { useAuthStore } from '@/stores/auth'
 
 const navigation = [
   { to: '/', label: 'Home' },
   { to: '/10-layer-model', label: '10-layer model' },
   { to: '/tech', label: 'Tech' },
-  { to: '/login', label: 'Login' },
 ]
+
+const auth = useAuthStore()
+const accountLabel = computed(() => {
+  const email = auth.userEmail.trim()
+  return email ? (email.split('@')[0] ?? email) : ''
+})
+const accountInitial = computed(() => accountLabel.value.slice(0, 1).toUpperCase() || '?')
 </script>
 
 <template>
@@ -17,6 +26,16 @@ const navigation = [
         <RouterLink v-for="item in navigation" :key="item.to" :to="item.to">
           {{ item.label }}
         </RouterLink>
+        <RouterLink
+          v-if="auth.isAuthenticated"
+          class="site-account"
+          to="/dashboard/history"
+          :aria-label="`Open account workspace for ${auth.userEmail}`"
+        >
+          <span class="site-account__avatar" aria-hidden="true">{{ accountInitial }}</span>
+          <span class="site-account__label">{{ accountLabel }}</span>
+        </RouterLink>
+        <RouterLink v-else to="/login">Login</RouterLink>
       </nav>
     </div>
   </header>
@@ -65,6 +84,34 @@ const navigation = [
   color: var(--primary);
 }
 
+.site-account {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 190px;
+}
+
+.site-account__avatar {
+  display: inline-grid;
+  width: 24px;
+  height: 24px;
+  flex: 0 0 auto;
+  place-items: center;
+  border: 1px solid var(--primary);
+  background: var(--soft-primary);
+  color: var(--primary);
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.site-account__label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 @media (max-width: 720px) {
   .site-header__inner {
     min-height: 48px;
@@ -84,6 +131,10 @@ const navigation = [
   .site-nav a {
     padding: 16px 0 14px;
     white-space: nowrap;
+  }
+
+  .site-account {
+    max-width: 148px;
   }
 }
 </style>
