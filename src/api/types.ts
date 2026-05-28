@@ -21,9 +21,12 @@ export type ApiErrorPayload = {
   message?: string
 }
 
+export type UserRole = 'user' | 'admin'
+
 export type UserProfile = {
   id: string
   email: string
+  role?: UserRole
 }
 
 export type AuthCredentials = {

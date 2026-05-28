@@ -40,12 +40,30 @@ Gate responsibilities:
 
 Playwright visual tests intentionally stay out of `pre-commit`; run them locally after UI changes and in CI before deployment.
 
+## Access Boundary
+
+Current frontend access model:
+
+- Public routes: `/`, `/10-layer-model`, `/tech`, `/cases/:slug`, `/login`, and `/register`.
+- Protected user routes: `/dashboard/history` and `/dashboard/reports/:id`.
+- `/history` is intentionally not a route; unknown public addresses render the 404 page.
+- Unauthenticated access to `/dashboard/*` redirects to `/login?redirect=<target>`.
+- Login/register switch links preserve `redirect`, and successful authentication returns to the requested protected route.
+
+RBAC compatibility:
+
+- `UserProfile.role` is optional and currently supports `'user' | 'admin'`.
+- Missing `role` is treated as `'user'` for compatibility with existing backend responses.
+- Router meta supports `requiredRole` for future `/admin/*` routes.
+- Frontend role checks are only navigation UX; backend ownership and authorization remain the security boundary.
+- Full RBAC tables and admin UI are deferred until user management, case publishing, quotas, or multi-admin workflows exist.
+
 ## Page Status
 
 | Page              | Route                    | Status   | Notes                                                                                                                                                                                |
 | ----------------- | ------------------------ | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | Tech architecture | `/tech`                  | complete | Implemented as Hero, workflow pipeline, system architecture map, report artifact anatomy, and bounded trust CTA. Local checks passed: format, lint, build, and Histoire story build. |
 | Report detail     | `/dashboard/reports/:id` | complete | Implemented as a product report shell using typed distilled sample data, visible evidence refs, missing data, Histoire story, and Playwright visual baselines.                       |
-| Scan history      | `/dashboard/history`     | complete | Implemented as a product workspace with sidebar, compact summary strip, table-first scan history, state stories, long-domain handling, and report reopen action.                     |
-| Auth pages        | `/login`, `/register`    | complete | Implemented as focused auth utility pages with minimal header, shared AuthForm, assurance panel, validation/loading/error states, and Histoire stories.                              |
+| Scan history      | `/dashboard/history`     | complete | Protected dashboard workspace with compact summary strip, table-first scan history, authenticated API state, and report reopen action.                                               |
+| Auth pages        | `/login`, `/register`    | complete | Focused auth utility pages with shared AuthForm, redirect preservation, assurance panel, validation/loading/error states, and Histoire stories.                                      |
 | Case study detail | `/cases/:slug`           | complete | Implemented as a public proof page with lazy-loaded Markdown report content, table of contents, evidence boundaries, Histoire stories, and Playwright visual baselines.              |

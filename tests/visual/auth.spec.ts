@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test'
+import { expect, test, type Page } from '@playwright/test'
 
 const authRoutes = [
   {
@@ -112,3 +112,47 @@ test('auth form exposes validation feedback without layout overflow', async ({ p
   )
   expect(hasHorizontalOverflow).toBe(false)
 })
+
+test('login keeps protected redirect and returns to target after authentication', async ({
+  page,
+}) => {
+  await mockLogin(page)
+  await mockEmptyHistory(page)
+
+  await page.goto('/login?redirect=/dashboard/history')
+
+  await expect(page.locator('.auth-form__switch').getByRole('link')).toHaveAttribute(
+    'href',
+    '/register?redirect=%2Fdashboard%2Fhistory',
+  )
+
+  await page.getByRole('button', { name: 'Login' }).click()
+
+  await expect(page).toHaveURL(/\/dashboard\/history$/)
+  await expect(page.getByRole('heading', { name: 'Scan history', exact: true })).toBeVisible()
+})
+
+async function mockLogin(page: Page): Promise<void> {
+  await page.route('http://127.0.0.1:8787/user/login', async (route) => {
+    await route.fulfill({
+      contentType: 'application/json',
+      body: JSON.stringify({
+        ok: true,
+        token: 'visual-test-token',
+        user: {
+          id: 'visual-test-user',
+          email: 'reviewer@example.com',
+        },
+      }),
+    })
+  })
+}
+
+async function mockEmptyHistory(page: Page): Promise<void> {
+  await page.route('http://127.0.0.1:8787/user/history?*', async (route) => {
+    await route.fulfill({
+      contentType: 'application/json',
+      body: JSON.stringify({ ok: true, history: [] }),
+    })
+  })
+}

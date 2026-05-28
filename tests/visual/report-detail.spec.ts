@@ -1,6 +1,7 @@
-import { expect, test } from '@playwright/test'
+import { expect, test, type Page } from '@playwright/test'
 
 test('report detail route renders the product report surface', async ({ page }, testInfo) => {
+  await setAuthSession(page)
   await page.goto('/dashboard/reports/sample-overreacted')
 
   await expect(page.getByRole('heading', { name: 'overreacted.io' })).toBeVisible()
@@ -38,9 +39,25 @@ test('report detail route renders the product report surface', async ({ page }, 
 })
 
 test('report detail screenshot baseline', async ({ page }) => {
+  await setAuthSession(page)
   await page.goto('/dashboard/reports/sample-overreacted', { waitUntil: 'networkidle' })
   await expect(page).toHaveScreenshot('report-detail-full-page.png', {
     animations: 'disabled',
     fullPage: true,
   })
 })
+
+async function setAuthSession(page: Page): Promise<void> {
+  await page.addInitScript(() => {
+    window.localStorage.setItem(
+      'site-10-layer-check.auth.v1',
+      JSON.stringify({
+        token: 'visual-test-token',
+        user: {
+          id: 'visual-test-user',
+          email: 'reviewer@example.com',
+        },
+      }),
+    )
+  })
+}

@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { computed } from 'vue'
+import { useRoute } from 'vue-router'
 
 import PublicHeader from '@/components/shell/PublicHeader.vue'
 import { useAuthSubmit } from '@/composables/useAuthSubmit'
 import type { AuthFieldPayload, AuthMode } from '@/content/authPage'
 import { authPageCopies } from '@/content/authPage'
+import { withRedirect } from '@/router/redirect'
 
 import AuthAssurancePanel from './AuthAssurancePanel.vue'
 import AuthForm from './AuthForm.vue'
@@ -13,8 +15,10 @@ const props = defineProps<{
   mode: AuthMode
 }>()
 
+const route = useRoute()
 const page = computed(() => authPageCopies[props.mode])
 const authSubmit = useAuthSubmit(() => props.mode)
+const switchHref = computed(() => withRedirect(page.value.switchHref, route.query.redirect))
 const formVisualState = computed(() =>
   authSubmit.visualState.value === 'idle' ? undefined : authSubmit.visualState.value,
 )
@@ -39,7 +43,7 @@ function handleSubmit(_payload: AuthFieldPayload) {
           :submit-label="page.submitLabel"
           :switch-prompt="page.switchPrompt"
           :switch-label="page.switchLabel"
-          :switch-href="page.switchHref"
+          :switch-href="switchHref"
           :password-help="page.passwordHelp"
           :status-message="statusMessage"
           :visual-state="formVisualState"

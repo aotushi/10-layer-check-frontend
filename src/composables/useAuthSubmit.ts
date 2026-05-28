@@ -1,12 +1,14 @@
 import { computed, readonly, shallowRef, toValue, type MaybeRefOrGetter } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
 import { ApiRequestError } from '@/api/client'
 import type { AuthFieldPayload, AuthFormVisualState, AuthMode } from '@/content/authPage'
 import { useLoginMutation, useRegisterMutation } from '@/queries/auth'
+import { resolveAuthRedirect } from '@/router/redirect'
 import { useAuthStore } from '@/stores/auth'
 
 export function useAuthSubmit(mode: MaybeRefOrGetter<AuthMode>) {
+  const route = useRoute()
   const router = useRouter()
   const auth = useAuthStore()
   const login = useLoginMutation()
@@ -43,7 +45,7 @@ export function useAuthSubmit(mode: MaybeRefOrGetter<AuthMode>) {
         user: response.user,
       })
 
-      await router.push({ name: 'history' })
+      await router.push(resolveAuthRedirect(route.query.redirect))
     } catch (error) {
       errorMessage.value = toAuthMessage(error, toValue(mode))
     }

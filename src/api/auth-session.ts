@@ -1,4 +1,4 @@
-import type { UserProfile } from './types'
+import type { UserProfile, UserRole } from './types'
 
 const AUTH_SESSION_KEY = 'site-10-layer-check.auth.v1'
 
@@ -61,10 +61,16 @@ function isAuthSession(value: unknown): value is AuthSession {
   }
 
   const userRecord = user as Record<string, unknown>
+  const role = userRecord.role
   return (
     typeof record.token === 'string' &&
     record.token.length > 0 &&
     typeof userRecord.id === 'string' &&
-    typeof userRecord.email === 'string'
+    typeof userRecord.email === 'string' &&
+    (role === undefined || isUserRole(role))
   )
+}
+
+function isUserRole(value: unknown): value is UserRole {
+  return value === 'user' || value === 'admin'
 }
