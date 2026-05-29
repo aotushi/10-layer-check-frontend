@@ -14,6 +14,9 @@ Primary UI contract:
 ## Commands
 
 - `npm run dev` starts Vite locally.
+- `npm run dev:worker` starts the sibling local Worker from `../03-web-app-shell` on port `8787`.
+- `npm run dev:full` starts the local Worker and Vite together for API integration work; Vite uses port `5175`.
+  Run `npm --prefix ../03-web-app-shell run dev:setup` once before testing login/history against a fresh local Worker database.
 - `npm run format` checks Prettier formatting.
 - `npm run format:write` writes Prettier formatting.
 - `npm run typecheck` runs Vue and TypeScript checks.
