@@ -33,3 +33,22 @@ test('home screenshot baseline after accepted Stitch implementation', async ({ p
     fullPage: true,
   })
 })
+
+test('home scan action shows the model update notice without API request', async ({ page }) => {
+  const scanRequests: string[] = []
+
+  page.on('request', (request) => {
+    if (request.url().includes('/scan/jobs')) {
+      scanRequests.push(request.url())
+    }
+  })
+
+  await page.goto('/')
+  await page.getByRole('button', { name: /run scan/i }).click()
+
+  await expect(
+    page.getByText('The model is under updating, U can check the example account data'),
+  ).toBeVisible()
+  await expect(page).toHaveURL(/\/$/)
+  expect(scanRequests).toEqual([])
+})

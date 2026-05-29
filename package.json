@@ -5,6 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host 127.0.0.1",
+    "dev:worker": "npm --prefix ../03-web-app-shell run dev:worker",
+    "dev:full": "concurrently --kill-others --names worker,frontend --prefix-colors blue,green \"npm run dev:worker\" \"npm run dev -- --port 5175\"",
     "build": "vue-tsc -b && vite build",
     "preview": "vite preview --host 127.0.0.1",
     "typecheck": "vue-tsc -b",
@@ -32,6 +34,7 @@
     "@types/node": "^24.12.3",
     "@vitejs/plugin-vue": "^6.0.6",
     "@vue/tsconfig": "^0.9.1",
+    "concurrently": "^9.2.1",
     "eslint": "^10.4.0",
     "eslint-plugin-vue": "^10.9.1",
     "globals": "^17.6.0",
